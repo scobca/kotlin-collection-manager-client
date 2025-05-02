@@ -1,14 +1,14 @@
 package org.itmo.kotlincollectionmanagerclient
 
-import org.itmo.kotlincollectionmanagerclient.utils.TcpConnectionFactory
+import org.itmo.kotlincollectionmanagerclient.services.InvokerService
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class KotlinCollectionManagerClientApplication : CommandLineRunner {
+class KotlinCollectionManagerClientApplication(private val invoker: InvokerService) : CommandLineRunner {
     override fun run(vararg args: String?) {
-        TcpConnectionFactory.connectToServer()
+        invoker.run()
     }
 }
 
