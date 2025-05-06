@@ -34,6 +34,8 @@ class InvokerService(
                 continue
             }
 
+            if (command == "exit") println("Application stopped."); runtime = false; continue
+
             if (validatableCommands.contains(command)) {
                 if (serverWatcher.checkConnection()) {
                     println(distributor.distribute(command, args))
