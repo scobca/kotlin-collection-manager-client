@@ -1,15 +1,19 @@
 package org.itmo.kotlincollectionmanagerclient.services
 
+import org.itmo.kotlincollectionmanagerclient.commands.HistoryCommand
 import org.itmo.kotlincollectionmanagerclient.storages.CommandsHistory
 import org.itmo.kotlincollectionmanagerclient.utils.CommandValidatorDistributor
+import org.itmo.kotlincollectionmanagerclient.utils.ServerWatcherUtil
 import org.itmo.kotlincollectionmanagerclient.utils.TcpConnectionFactory
 import org.springframework.stereotype.Service
 import java.util.Scanner
 
 @Service
 class InvokerService(
+    private val distributor: CommandValidatorDistributor,
+    private val serverWatcher: ServerWatcherUtil,
+    private val historyCommand: HistoryCommand,
     private val commandsHistory: CommandsHistory,
-    private val distributor: CommandValidatorDistributor
 ) {
     private var runtime = true
     private val validatableCommands = listOf<String>("insert", "update", "replaceIfLower")
@@ -29,7 +33,7 @@ class InvokerService(
             }
 
             if (validatableCommands.contains(command)) {
-                if (checkConnection()) {
+                if (serverWatcher.checkConnection()) {
                     val response = distributor.distribute(command, args)
 
 
@@ -45,7 +49,7 @@ class InvokerService(
             }
 
             if (command == "history") {
-                historyCommand()
+                historyCommand.run()
                 continue
             }
 
@@ -57,29 +61,6 @@ class InvokerService(
 
             println(response)
             print("> ")
-        }
-    }
-
-    private fun historyCommand() {
-        if (checkConnection()) {
-            val response = commandsHistory.getCommandsHistory()
-            println(response)
-
-            commandsHistory.addCommand("history")
-
-            print("> ")
-        }
-    }
-
-    private fun checkConnection(): Boolean {
-        val response = TcpConnectionFactory.sendMessage("Check server connection")
-
-        if (response.contains("(!) Error sending message: Server not available. Try again later.")) {
-            println("(!) Error sending message: Server not available. Try again later.")
-            print("> ")
-            return false
-        } else {
-            return true
         }
     }
 }
