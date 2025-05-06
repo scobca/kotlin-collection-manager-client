@@ -7,10 +7,14 @@ import org.itmo.kotlincollectionmanagerclient.collection.House
 import org.itmo.kotlincollectionmanagerclient.utils.AdvancedScanner
 import org.itmo.kotlincollectionmanagerclient.validators.interfaces.BasicCommandValidator
 import org.springframework.stereotype.Component
+import kotlin.text.toBoolean
+import kotlin.text.toFloat
+import kotlin.text.toInt
+import kotlin.text.toLong
 
 @Component
 class InsertValidator(private val scanner: AdvancedScanner) : BasicCommandValidator {
-    override fun validate(args: List<String>): Comparable<Nothing> {
+    override fun validate(args: List<String>): Any {
         if (args.isEmpty()) return "This command requires at least one argument (flatID)."
 
         var id = 0L
@@ -29,7 +33,7 @@ class InsertValidator(private val scanner: AdvancedScanner) : BasicCommandValida
         return "Invalid count of arguments"
     }
 
-    fun lifeTimeExecution(id: Long): Flat {
+    fun lifeTimeExecution(id: Long): String {
         val newFlat = Flat()
         val newCoordinates = Coordinates()
         val newHouse = House()
@@ -71,42 +75,36 @@ class InsertValidator(private val scanner: AdvancedScanner) : BasicCommandValida
         newHouse.setNumberOfFloors(scanner.cycleScan("Enter the number of floors: ") { it.toLong() })
         newFlat.setHouse(newHouse)
 
-        return newFlat
+        return "[${newFlat.getId()},${newHouse.getName()},${
+            newFlat.getCoordinates()?.getX()
+        },${
+            newFlat.getCoordinates()?.getY()
+        },${newFlat.getArea()},${newFlat.getNumberOfRooms()},${newFlat.getPrice()},${newFlat.getBalcony()},${newFlat.getFurnish()},${
+            newFlat.getHouse()?.getName()
+        },${newFlat.getHouse()?.getYear()},${newFlat.getHouse()?.getNumberOfFloors()}]"
     }
 
-    fun automaticallyExecution(id: Long?, data: String): String {
+    fun automaticallyExecution(id: Long, data: String): String {
         val args = data.replace("[", "").replace("]", "").split(",")
 
-        if (args.size != 11) return "Invalid arguments."
-
         try {
-            val coordinates = Coordinates()
-                .setX(args[1].toLong())
-                .setY(args[2].toFloat())
+            Flat()
+                .setId(id)
+                .setName(args[0])
+                .setCoordinates(Coordinates(args[1].toLong(), args[2].toFloat()))
+                .setArea(args[3].toLong())
+                .setNumberOfRooms(args[4].toLong())
+                .setPrice(args[5].toLong())
+                .setBalcony(args[6].toBoolean())
+                .setFurnish(Furnish.valueOf(args[7].uppercase().trim()))
+                .setHouse(House(args[8], args[9].toInt(), args[10].toLong()))
 
-            val house = House()
-                .setName(args[8])
-                .setYear(args[9].toInt())
-                .setNumberOfFloors(args[10].toLong())
+            if (args.size != 11) return "Invalid arguments."
+            val newFlat = data.replaceFirst("[", "[$id,")
 
-            val flat = id?.let {
-                Flat()
-                    .setId(it)
-                    .setName(args[0])
-                    .setCoordinates(coordinates)
-                    .setArea(args[3].toLong())
-                    .setNumberOfRooms(args[4].toLong())
-                    .setPrice(args[5].toLong())
-                    .setBalcony(args[6].toBoolean())
-                    .setFurnish(Furnish.validate(args[7].uppercase()))
-                    .setHouse(house)
-            }
-
-            return flat.toString()
-        } catch (e: NumberFormatException) {
-            return "Invalid number format. Please try again. ${e.message}"
+            return newFlat
         } catch (e: Exception) {
-            return e.message.toString()
+            return "Error: ${e.message}"
         }
     }
 }

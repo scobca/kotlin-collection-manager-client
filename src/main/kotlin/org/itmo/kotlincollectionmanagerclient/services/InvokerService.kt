@@ -34,15 +34,9 @@ class InvokerService(
 
             if (validatableCommands.contains(command)) {
                 if (serverWatcher.checkConnection()) {
-                    val response = distributor.distribute(command, args)
-
-
-                    if (!response.toString().contains("Flat(")) {
-                        println(response)
-                        print("> ")
-                        continue
-                    }
-                    println(response)
+                    println(distributor.distribute(command, args))
+                    print("> ")
+                    continue
                 } else {
                     continue
                 }

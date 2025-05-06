@@ -12,7 +12,16 @@ class CommandValidatorDistributor(
     private val replaceIfLowerValidator: ReplaceIfLowerValidator,
 ) {
     fun distribute(commandName: String, args: List<String>): Any {
-        if (commandName == "insert") return insertValidator.validate(args)
+        if (commandName == "insert") {
+            val response = insertValidator.validate(args).toString()
+
+            return if (!response.contains("[") && !response.contains("]")) {
+                response
+            } else {
+                println(response + "response")
+                TcpConnectionFactory.sendMessage("insert $response")
+            }
+        }
         if (commandName == "update") return updateValidator.validate(args)
         if (commandName == "replaceIfLower") return replaceIfLowerValidator.validate(args)
 
