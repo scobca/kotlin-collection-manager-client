@@ -22,7 +22,15 @@ class CommandValidatorDistributor(
                 TcpConnectionFactory.sendMessage("insert $response")
             }
         }
-        if (commandName == "update") return updateValidator.validate(args)
+        if (commandName == "update") {
+            val response = updateValidator.validate(args).toString()
+
+            return if (!response.contains("[") && !response.contains("]")) {
+                response
+            } else {
+                TcpConnectionFactory.sendMessage("update $response")
+            }
+        }
         if (commandName == "replaceIfLower") return replaceIfLowerValidator.validate(args)
 
         return "Wrong command name"
