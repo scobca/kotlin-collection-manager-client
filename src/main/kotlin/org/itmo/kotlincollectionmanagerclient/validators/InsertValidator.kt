@@ -75,7 +75,7 @@ class InsertValidator(private val scanner: AdvancedScanner) : BasicCommandValida
         newHouse.setNumberOfFloors(scanner.cycleScan("Enter the number of floors: ") { it.toLong() })
         newFlat.setHouse(newHouse)
 
-        return "[${newFlat.getId()},${newHouse.getName()},${
+        return "[${newFlat.getId()},${newFlat.getName()},${
             newFlat.getCoordinates()?.getX()
         },${
             newFlat.getCoordinates()?.getY()
