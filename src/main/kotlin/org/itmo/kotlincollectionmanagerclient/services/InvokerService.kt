@@ -4,6 +4,7 @@ import org.itmo.kotlincollectionmanagerclient.commands.HistoryCommand
 import org.itmo.kotlincollectionmanagerclient.storages.CommandsHistory
 import org.itmo.kotlincollectionmanagerclient.utils.CommandValidatorDistributor
 import org.itmo.kotlincollectionmanagerclient.utils.ServerWatcherUtil
+import org.itmo.kotlincollectionmanagerclient.utils.StringToMapParser
 import org.itmo.kotlincollectionmanagerclient.utils.TcpConnectionFactory
 import org.springframework.stereotype.Service
 import java.util.Scanner
@@ -24,8 +25,9 @@ class InvokerService(
         print("> ")
         while (runtime) {
             val line = scanner.nextLine().trim()
-            val command = line.trim().split(" ")[0]
-            val args = line.split(" ").drop(1)
+            val parts = line.trim().split(" ")
+            val command = parts.firstOrNull() ?: ""
+            val args = parts.drop(1)
 
             if (line == "") {
                 print("> ")
@@ -51,6 +53,18 @@ class InvokerService(
 
             if (!response.contains("Command $command not found")) {
                 commandsHistory.addCommand(command)
+            }
+
+            if (command == "help") {
+                val correctResponse = StringToMapParser.parseToMap(response)
+                val bold = "\u001B[1m"
+                val reset = "\u001B[0m"
+
+                correctResponse.forEach { (key, value) ->
+                    println("${bold}$key ${reset}: $value")
+                }
+                print("> ")
+                continue
             }
 
             println(response)
