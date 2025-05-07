@@ -22,4 +22,6 @@ class InvokerService(
             if (response == "") continue
         }
     }
+
+    fun stop() = !runtime
 }

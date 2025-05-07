@@ -1,7 +1,9 @@
 package org.itmo.kotlincollectionmanagerclient.utils
 
+import org.itmo.kotlincollectionmanagerclient.commands.ExecuteCommand
 import org.itmo.kotlincollectionmanagerclient.commands.HistoryCommand
 import org.itmo.kotlincollectionmanagerclient.storages.CommandsHistory
+import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
 
 @Component
@@ -9,7 +11,8 @@ class InvokerLogic(
     private val serverWatcher: ServerWatcherUtil,
     private val distributor: CommandValidatorDistributor,
     private val historyCommand: HistoryCommand,
-    private val commandsHistory: CommandsHistory
+    private val commandsHistory: CommandsHistory,
+    @Lazy private val executeCommand: ExecuteCommand
 ) {
     private val validatableCommands = listOf<String>("insert", "update", "replaceIfLower")
 
@@ -26,6 +29,11 @@ class InvokerLogic(
         if (command == "exit") {
             println("Application stopped.")
             return "STOP"
+        }
+
+        if (command == "execute") {
+            executeCommand.execute(args)
+            return ""
         }
 
         if (validatableCommands.contains(command)) {
