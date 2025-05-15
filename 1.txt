@@ -1,3 +1,4 @@
 show
 ehow
-exit
+insert 1 [name,1,123,212,12,10000,true,little,house1,2000,12]
+insert 10 [name,1,123,212,12,10000,true,little,house1,2000,12]
