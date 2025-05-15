@@ -1,13 +1,22 @@
 package org.itmo.kotlincollectionmanagerclient.utils
 
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
 import java.io.PrintWriter
 import java.net.ConnectException
 import java.net.Socket
 
-object TcpConnectionFactory {
+@Component
+class TcpConnectionFactory {
+    @Value("\${config.tcp-server-host}")
+    private lateinit var tcpServerHost: String
+
+    @Value("\${config.tcp-server-port}")
+    private lateinit var tcpServerPort: String
+
     fun sendMessage(message: String): String {
         try {
-            Socket("localhost", 6000).use { socket ->
+            Socket(tcpServerHost, tcpServerPort.toInt()).use { socket ->
                 val output = PrintWriter(socket.getOutputStream(), true)
                 val input = socket.getInputStream().bufferedReader()
 

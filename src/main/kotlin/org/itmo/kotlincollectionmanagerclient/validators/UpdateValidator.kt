@@ -10,7 +10,10 @@ import org.itmo.kotlincollectionmanagerclient.validators.interfaces.BasicCommand
 import org.springframework.stereotype.Component
 
 @Component
-class UpdateValidator(private val scanner: AdvancedScanner) : BasicCommandValidator {
+class UpdateValidator(
+    private val scanner: AdvancedScanner,
+    private val tcpConnectionFactory: TcpConnectionFactory
+) : BasicCommandValidator {
     override fun validate(args: List<String>): Any {
         if (args.isEmpty()) return "This command requires at least one argument (flatID)."
 
@@ -31,7 +34,7 @@ class UpdateValidator(private val scanner: AdvancedScanner) : BasicCommandValida
     }
 
     fun lifeTimeExecution(id: Long): String {
-        val oldFlat = TcpConnectionFactory.sendMessage("getElementById $id")
+        val oldFlat = tcpConnectionFactory.sendMessage("getElementById $id")
 
         if (oldFlat.contains("Flat with id $id not found")) {
             return "Flat with id $id not found"

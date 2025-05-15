@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component
 class CommandValidatorDistributor(
     private val insertValidator: InsertValidator,
     private val updateValidator: UpdateValidator,
+    private val tcpConnectionFactory: TcpConnectionFactory
 ) {
     fun distribute(commandName: String, args: List<String>): Any = when (commandName) {
         "insert" -> handleCommand("insert", args, insertValidator)
@@ -26,7 +27,7 @@ class CommandValidatorDistributor(
         return if (!response.contains("[") && !response.contains("]")) {
             response
         } else {
-            TcpConnectionFactory.sendMessage("$command $response")
+            tcpConnectionFactory.sendMessage("$command $response")
         }
     }
 }

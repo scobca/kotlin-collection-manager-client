@@ -23,6 +23,7 @@ class ExecuteCommand(
                 resource.forEachLine { commandLine ->
                     run {
                         if (lifetime) {
+                            println(commandLine)
                             val line = commandLine.trim()
                             val response = invokerLogic.handleCommand(line)
 
@@ -41,7 +42,6 @@ class ExecuteCommand(
             print("> ")
             return ""
         }
-        print("> ")
         return ""
     }
 }

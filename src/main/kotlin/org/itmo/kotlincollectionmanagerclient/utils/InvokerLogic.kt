@@ -8,11 +8,12 @@ import org.springframework.stereotype.Component
 
 @Component
 class InvokerLogic(
+    private val tcpConnectionFactory: TcpConnectionFactory,
     private val serverWatcher: ServerWatcherUtil,
     private val distributor: CommandValidatorDistributor,
     private val historyCommand: HistoryCommand,
     private val commandsHistory: CommandsHistory,
-    @Lazy private val executeCommand: ExecuteCommand
+    @Lazy private val executeCommand: ExecuteCommand,
 ) {
     private val validatableCommands = listOf<String>("insert", "update", "replaceIfLower")
 
@@ -51,7 +52,7 @@ class InvokerLogic(
             return ""
         }
 
-        val response = TcpConnectionFactory.sendMessage(line)
+        val response = tcpConnectionFactory.sendMessage(line)
 
         if (!response.contains("Command $command not found")) {
             commandsHistory.addCommand(command)
