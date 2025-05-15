@@ -56,6 +56,9 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("io.projectreactor:reactor-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    // Utilities
+    implementation("one.stayfocused.spring:dotenv-spring-boot:1.0.0")
 }
 
 kotlin {
