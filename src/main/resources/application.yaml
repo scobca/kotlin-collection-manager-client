@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: kotlin-collection-manager-client
+
+server:
+  port: 8083
+
+config:
+  tcp-server-port: ${TCP_PORT}
+  tcp-server-host: ${TCP_HOST}
