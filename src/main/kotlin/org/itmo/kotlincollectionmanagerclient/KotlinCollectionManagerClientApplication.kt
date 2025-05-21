@@ -1,14 +1,14 @@
 package org.itmo.kotlincollectionmanagerclient
 
-import org.itmo.kotlincollectionmanagerclient.services.InvokerService
+import org.itmo.kotlincollectionmanagerclient.services.AuthInvoker
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class KotlinCollectionManagerClientApplication(private val invoker: InvokerService) : CommandLineRunner {
+class KotlinCollectionManagerClientApplication(private val authInvoker: AuthInvoker) : CommandLineRunner {
     override fun run(vararg args: String?) {
-        invoker.run()
+        authInvoker.run()
     }
 }
 
