@@ -48,7 +48,6 @@ class AuthInvoker(
                     val refreshToken = matchResult?.groupValues[2]
 
                     if (response.startsWith("UserTokensDto")) {
-
                         TokensStorage.setAccessToken(accessToken)
                         TokensStorage.setRefreshToken(refreshToken)
 
@@ -56,13 +55,11 @@ class AuthInvoker(
                         invoker.run()
                         continue
                     } else {
-                        println(response)
-
                         if (response.contains("message=409 Conflict")) {
                             println("User with this login already exists")
                             continue
                         }
-                        if (response.contains("message=401 Unauthorized")) {
+                        if (response.contains("message=401 Unauthorized") || response.contains("message=404 Not Found")) {
                             println("Wrong user login or password")
                             continue
                         }
