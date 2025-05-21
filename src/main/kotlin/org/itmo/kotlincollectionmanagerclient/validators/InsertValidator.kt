@@ -4,6 +4,7 @@ import org.itmo.kotlincollectionmanagerclient.collection.Coordinates
 import org.itmo.kotlincollectionmanagerclient.collection.Flat
 import org.itmo.kotlincollectionmanagerclient.collection.Furnish
 import org.itmo.kotlincollectionmanagerclient.collection.House
+import org.itmo.kotlincollectionmanagerclient.storages.TokensStorage
 import org.itmo.kotlincollectionmanagerclient.utils.AdvancedScanner
 import org.itmo.kotlincollectionmanagerclient.validators.interfaces.BasicCommandValidator
 import org.springframework.stereotype.Component
@@ -81,7 +82,7 @@ class InsertValidator(private val scanner: AdvancedScanner) : BasicCommandValida
             newFlat.getCoordinates()?.getY()
         },${newFlat.getArea()},${newFlat.getNumberOfRooms()},${newFlat.getPrice()},${newFlat.getBalcony()},${newFlat.getFurnish()},${
             newFlat.getHouse()?.getName()
-        },${newFlat.getHouse()?.getYear()},${newFlat.getHouse()?.getNumberOfFloors()}]"
+        },${newFlat.getHouse()?.getYear()},${newFlat.getHouse()?.getNumberOfFloors()},${TokensStorage.getAccessToken()}]"
     }
 
     fun automaticallyExecution(id: Long, data: String): String {
@@ -102,7 +103,13 @@ class InsertValidator(private val scanner: AdvancedScanner) : BasicCommandValida
             if (args.size != 11) return "Invalid arguments."
             val newFlat = data.replaceFirst("[", "[$id,")
 
-            return newFlat
+            val lastIndex = newFlat.lastIndexOf(']')
+
+            if (lastIndex == -1) return newFlat
+            val res = newFlat.substring(0, lastIndex) + ",${TokensStorage.getAccessToken()}]"
+
+            return res
+
         } catch (e: Exception) {
             return "Error: ${e.message}"
         }

@@ -3,6 +3,7 @@ package org.itmo.kotlincollectionmanagerclient.utils
 import org.itmo.kotlincollectionmanagerclient.commands.ExecuteCommand
 import org.itmo.kotlincollectionmanagerclient.commands.HistoryCommand
 import org.itmo.kotlincollectionmanagerclient.storages.CommandsHistory
+import org.itmo.kotlincollectionmanagerclient.storages.TokensStorage
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
 
@@ -52,7 +53,10 @@ class InvokerLogic(
             return ""
         }
 
-        val response = tcpConnectionFactory.sendMessage(line)
+        val a = "$args ${TokensStorage.getAccessToken()}"
+        val l = "$command $a"
+
+        val response = tcpConnectionFactory.sendMessage(l)
 
         if (!response.contains("Command $command not found")) {
             commandsHistory.addCommand(command)

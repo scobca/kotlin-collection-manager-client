@@ -40,18 +40,27 @@ class AuthInvoker(
 
             if (authCommands.contains(command)) {
                 if (serverWatcher.checkConnection()) {
-                    val response = tcpConnectionFactory.sendMessage(line).split(" ")
+                    val response = tcpConnectionFactory.sendMessage(line)
+                    val regex = """accessToken=([^,]+), refreshToken=(.+)\)""".toRegex()
 
-                    if (response.size == 2) {
-                        TokensStorage.setAccessToken(response[0])
-                        TokensStorage.setRefreshToken(response[1])
+                    val matchResult = regex.find(response)
 
-                        println("Logged in, welcome!")
-                        invoker.run()
-                        continue
-                    } else {
-                        println("Wrong login or password. Try again.")
-                        continue
+                    if (matchResult != null) {
+                        val accessToken = matchResult.groupValues[1]
+                        val refreshToken = matchResult.groupValues[2]
+
+                        if (response.split(" ").size == 2) {
+
+                            TokensStorage.setAccessToken(accessToken)
+                            TokensStorage.setRefreshToken(refreshToken)
+
+                            println("Logged in, welcome!")
+                            invoker.run()
+                            continue
+                        } else {
+                            println("Wrong login or password. Try again.")
+                            continue
+                        }
                     }
                 } else {
                     continue
