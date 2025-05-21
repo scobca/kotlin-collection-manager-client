@@ -28,7 +28,6 @@ class AuthInvoker(
             val command = line.split(" ")[0]
 
             if (line == "") {
-                print("> ")
                 continue
             }
 
@@ -45,29 +44,32 @@ class AuthInvoker(
 
                     val matchResult = regex.find(response)
 
-                    if (matchResult != null) {
-                        val accessToken = matchResult.groupValues[1]
-                        val refreshToken = matchResult.groupValues[2]
+                    val accessToken = matchResult?.groupValues[1]
+                    val refreshToken = matchResult?.groupValues[2]
 
-                        if (response.split(" ").size == 2) {
+                    if (response.startsWith("UserTokensDto")) {
 
-                            TokensStorage.setAccessToken(accessToken)
-                            TokensStorage.setRefreshToken(refreshToken)
+                        TokensStorage.setAccessToken(accessToken)
+                        TokensStorage.setRefreshToken(refreshToken)
 
-                            println("Logged in, welcome!")
-                            invoker.run()
+                        println("Logged in, welcome!")
+                        invoker.run()
+                        continue
+                    } else {
+                        println(response)
+
+                        if (response.contains("message=409 Conflict")) {
+                            println("User with this login already exists")
                             continue
-                        } else {
-                            println("Wrong login or password. Try again.")
+                        }
+                        if (response.contains("message=401 Unauthorized")) {
+                            println("Wrong user login or password")
                             continue
                         }
                     }
-                } else {
-                    continue
                 }
             } else {
                 println("Unknown command $command, try again.")
-                print("> ")
                 continue
             }
         }
