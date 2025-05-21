@@ -52,13 +52,13 @@ class UpdateValidator(
             scanner.cycleUpdateScan(
                 "Enter new coordinate x (old coordinates: ${data[2]}): ",
                 flat.getCoordinates()?.getX()
-            ) { it.toLong() }
+            ) { it.trim().toLong() }
                 ?.let { coordinates.setX(it) }
 
             scanner.cycleUpdateScan(
                 "Enter coordinates y (old coordinates: ${data[3]}): ",
                 coordinates.getY()
-            ) { it.toFloat() }
+            ) { it.trim().toFloat() }
                 ?.let { coordinates.setY(it) }
             flat.setCoordinates(coordinates)
 
@@ -115,13 +115,15 @@ class UpdateValidator(
                 ?.let { house.setNumberOfFloors(it) }
             flat.setHouse(house)
 
-            return "[${flat.getId()},${flat.getName()},${
+            val res = "[$id,${flat.getName()},${
                 flat.getCoordinates()?.getX()
             },${
                 flat.getCoordinates()?.getY()
             },${flat.getArea()},${flat.getNumberOfRooms()},${flat.getPrice()},${flat.getBalcony()},${flat.getFurnish()},${
                 flat.getHouse()?.getName()
             },${flat.getHouse()?.getYear()},${flat.getHouse()?.getNumberOfFloors()},${TokensStorage.getAccessToken()}]"
+
+            return res
         }
     }
 
