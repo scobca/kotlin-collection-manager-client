@@ -1,6 +1,7 @@
 package org.itmo.kotlincollectionmanagerclient.exceptions.handlers
 
 import org.itmo.kotlincollectionmanagerclient.exceptions.AuthenticationException
+import org.itmo.kotlincollectionmanagerclient.exceptions.DoubleRecordException
 import org.itmo.kotlincollectionmanagerclient.exceptions.ServerNotAvailableException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -25,6 +26,17 @@ class BasicExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
             ErrorMessage(
                 statusCode = HttpStatus.UNAUTHORIZED.value(),
+                errorName = e.javaClass.simpleName,
+                message = e.message ?: "Message not provided"
+            )
+        )
+    }
+
+    @ExceptionHandler
+    fun handlerUnauthorizedException(e: DoubleRecordException): ResponseEntity<ErrorMessage?> {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+            ErrorMessage(
+                statusCode = HttpStatus.CONFLICT.value(),
                 errorName = e.javaClass.simpleName,
                 message = e.message ?: "Message not provided"
             )
