@@ -1,6 +1,7 @@
 package org.itmo.kotlincollectionmanagerclient.services
 
 import org.itmo.kotlincollectionmanagerclient.exceptions.AuthenticationException
+import org.itmo.kotlincollectionmanagerclient.exceptions.DoubleRecordException
 import org.itmo.kotlincollectionmanagerclient.storages.TokensStorage
 import org.itmo.kotlincollectionmanagerclient.utils.ServerWatcherUtil
 import org.itmo.kotlincollectionmanagerclient.utils.TcpConnectionFactory
@@ -11,9 +12,13 @@ class AuthService(
     private val serverWatcher: ServerWatcherUtil,
     private val tcpConnectionFactory: TcpConnectionFactory,
 ) {
-    fun login(login: String, password: String): Boolean {
+    fun login(login: String, password: String): Boolean = sendCommand("login", login, password)
+
+    fun register(login: String, password: String): Boolean = sendCommand("register", login, password)
+
+    private fun sendCommand(command: String, login: String, password: String): Boolean {
         if (serverWatcher.checkConnection()) {
-            val line = "login $login $password"
+            val line = "$command $login $password"
             val response = tcpConnectionFactory.sendMessage(line)
             val regex = """accessToken=([^,]+), refreshToken=(.+)\)""".toRegex()
 
@@ -31,6 +36,9 @@ class AuthService(
                 println(response)
                 if (response.contains("message=401") || response.contains("message=404")) {
                     throw AuthenticationException("Username or password invalid")
+                }
+                if (response.contains("message=409")) {
+                    throw DoubleRecordException("User with this email already exists")
                 }
             }
         }
