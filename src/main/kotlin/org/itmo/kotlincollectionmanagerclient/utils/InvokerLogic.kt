@@ -53,8 +53,13 @@ class InvokerLogic(
             return ""
         }
 
-        val a = "$args ${TokensStorage.getAccessToken()}"
+        val a = if (args.isNotEmpty()) {
+            "${args[0]} ${TokensStorage.getAccessToken()}"
+        } else {
+            "${TokensStorage.getAccessToken()}"
+        }
         val l = "$command $a"
+        println(a)
 
         val response = tcpConnectionFactory.sendMessage(l)
 
