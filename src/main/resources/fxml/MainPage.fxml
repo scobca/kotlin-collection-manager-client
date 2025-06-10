@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.itmo.kotlincollectionmanagerclient.controllers.MainPageController">
+   <SplitPane orientation="VERTICAL" prefHeight="412.0" prefWidth="900.0">
+     <items>
+      <ScrollPane prefHeight="427.0" prefWidth="898.0">
+        <content>
+          <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="368.0" prefWidth="880.0">
+            <children>
+              <Label fx:id="collectionLabel" alignment="CENTER" layoutX="14.0" layoutY="15.0" style="&#10;" text="Коллекция" textAlignment="CENTER" wrapText="false">
+                        <font>
+                    <Font size="18.0" fx:id="x1" />
+                        </font>
+                        <textFill>
+                    <Color red="0.624" green="0.624" blue="0.624" fx:id="x2" />
+                        </textFill>
+                     </Label>
+                  <TableView fx:id="tableView" layoutX="12.0" layoutY="39.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="269.0" prefWidth="878.0">
+                  <columns>
+                  <TableColumn fx:id="idLabel" prefWidth="46.12787985801697" text="id" />
+                  <TableColumn fx:id="flatNameLabel" prefWidth="75.26275634765625" text="name" />
+                  <TableColumn prefWidth="30.80084228515625" text="x" fx:id="xCordLabel" />
+                  <TableColumn fx:id="yCordLabel" prefWidth="32.58448791503906" text="y" />
+                  <TableColumn fx:id="flatAreaLabel" prefWidth="85.87382507324219" text="area" />
+                  <TableColumn fx:id="numberOfRoomsLabel" prefWidth="88.45120239257812" text="rooms" />
+                  <TableColumn fx:id="priceLabel" prefWidth="131.63327026367188" text="price" />
+                  <TableColumn fx:id="balconyLabel" prefWidth="71.50860595703125" text="balcony" />
+                  <TableColumn fx:id="furnishLabel" prefWidth="71.650390625" text="furnish" />
+                  <TableColumn fx:id="houseNameLabel" prefWidth="83.849609375" text="houseName" />
+                  <TableColumn fx:id="houseYearLabel" prefWidth="75.0" text="year" />
+                  <TableColumn fx:id="numberOfFloorsLabel" prefWidth="76.0" text="floors" />
+                  </columns>
+                        <columnResizePolicy>
+                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                        </columnResizePolicy>
+                  </TableView>
+            </children>
+          </AnchorPane>
+        </content>
+      </ScrollPane>
+     </items>
+   </SplitPane>
+   <AnchorPane prefHeight="200.0" prefWidth="200.0">
+      <children>
+         <Label fx:id="menuLabel" alignment="CENTER" layoutX="11.0" layoutY="16.0" prefHeight="23.0" prefWidth="91.0" style="&#10;" text="Меню" textAlignment="CENTER" wrapText="false">
+            <font>
+               <Font size="18.0" fx:id="x111" />
+            </font>
+            <textFill>
+               <Color red="0.624" green="0.624" blue="0.624" fx:id="x211" />
+            </textFill>
+         </Label>
+         <Label fx:id="userLabel" alignment="CENTER" layoutX="403.0" layoutY="16.0" prefHeight="23.0" prefWidth="210.0" style="&#10;" text="Пользователь" textAlignment="RIGHT" wrapText="false">
+            <font>
+               <Font size="18.0" fx:id="x1111" />
+            </font>
+            <textFill>
+               <Color red="0.624" green="0.624" blue="0.624" fx:id="x2111" />
+            </textFill>
+         </Label>
+         <Button fx:id="logoutButton" layoutX="631.0" layoutY="15.0" mnemonicParsing="false" onAction="#logout" prefHeight="26.0" prefWidth="79.0" text="Выйти" />
+         <ChoiceBox fx:id="languageField" layoutX="725.0" layoutY="15.0" prefWidth="150.0" />
+      </children>
+   </AnchorPane>
+</VBox>
