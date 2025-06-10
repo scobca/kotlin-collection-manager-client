@@ -53,12 +53,9 @@ class MainPageController(
 
     @FXML lateinit var filterContainsNameButton: Button
     @FXML lateinit var getAveragePriceButton: Button
-    @FXML lateinit var replaceIfLowerButton: Button
     @FXML lateinit var clearButton: Button
-    @FXML lateinit var removeButton: Button
     @FXML lateinit var removeAllByBalconyButton: Button
     @FXML lateinit var removeIfLowerKeyButton: Button
-    @FXML lateinit var updateButton: Button
     @FXML lateinit var insertButton: Button
 
     private lateinit var currentBundle: ResourceBundle
@@ -89,6 +86,12 @@ class MainPageController(
             alert.title = "Error"
             alert.headerText = e.message
             alert.showAndWait()
+        }
+
+        tableView.selectionModel.selectedItemProperty().addListener { _, _, newValue ->
+            if (newValue != null) {
+                println("Selected item: $newValue")
+            }
         }
 
         languageField.getItems().addAll("ru", "no", "es", "el")
@@ -129,12 +132,9 @@ class MainPageController(
         numberOfFloorsLabel.text = currentBundle.getString("main.numberOfFloorsLabel")
 
         insertButton.text = currentBundle.getString("main.insertButton")
-        updateButton.text = currentBundle.getString("main.updateButton")
         removeIfLowerKeyButton.text = currentBundle.getString("main.removeIfLowerKeyButton")
         removeAllByBalconyButton.text = currentBundle.getString("main.removeAllByBalconyButton")
-        removeButton.text = currentBundle.getString("main.removeButton")
         clearButton.text = currentBundle.getString("main.clearButton")
-        replaceIfLowerButton.text = currentBundle.getString("main.replaceIfLowerButton")
         getAveragePriceButton.text = currentBundle.getString("main.getAveragePriceButton")
         filterContainsNameButton.text = currentBundle.getString("main.filterContainsNameButton")
     }
@@ -150,12 +150,6 @@ class MainPageController(
     fun insert() {
         router.showPage("/fxml/InsertPage.fxml", currentBundle)
     }
-
-    @FXML
-    fun update() {}
-
-    @FXML
-    fun remove() {}
 
     @FXML
     fun removeAllByBalcony() {}
@@ -175,9 +169,6 @@ class MainPageController(
             router.showPage("/fxml/MainPage.fxml", currentBundle)
         }
     }
-
-    @FXML
-    fun replaceIfLower() {}
 
     @FXML
     fun getAveragePrice() {
