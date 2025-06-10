@@ -30,7 +30,6 @@ class MainPageController(
     private val localizer: Localizer,
     private val commandsService: CommandsService
 ) {
-
     @FXML private lateinit var menuLabel: Label
     @FXML private lateinit var collectionLabel: Label
     @FXML private lateinit var tableView: TableView<FlatDto>
@@ -50,6 +49,16 @@ class MainPageController(
     @FXML lateinit var houseNameLabel: TableColumn<FlatDto, String>
     @FXML lateinit var houseYearLabel: TableColumn<FlatDto, Int>
     @FXML lateinit var numberOfFloorsLabel: TableColumn<FlatDto, Long>
+
+    @FXML lateinit var filterContainsNameButton: Button
+    @FXML lateinit var getAveragePriceButton: Button
+    @FXML lateinit var replaceIfLowerButton: Button
+    @FXML lateinit var clearButton: Button
+    @FXML lateinit var removeButton: Button
+    @FXML lateinit var removeAllByBalconyButton: Button
+    @FXML lateinit var removeIfLowerKeyButton: Button
+    @FXML lateinit var updateButton: Button
+    @FXML lateinit var insertButton: Button
 
     private lateinit var currentBundle: ResourceBundle
 
@@ -125,4 +134,31 @@ class MainPageController(
         resetUserData()
         router.showPage("/fxml/LoginPage.fxml", currentBundle)
     }
+
+    @FXML
+    fun insert() {}
+
+    @FXML
+    fun update() {}
+
+    @FXML
+    fun remove() {}
+
+    @FXML
+    fun removeAllByBalcony() {}
+
+    @FXML
+    fun removeIfLowerKey() {}
+
+    @FXML
+    fun clear() {}
+
+    @FXML
+    fun replaceIfLower() {}
+
+    @FXML
+    fun getAveragePrice() {}
+
+    @FXML
+    fun filterContainsName() {}
 }
