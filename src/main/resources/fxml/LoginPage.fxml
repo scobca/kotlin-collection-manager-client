@@ -2,23 +2,25 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<TitledPane animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" text="Авторизация" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.itmo.kotlincollectionmanagerclient.controllers.LoginPageController">
+<TitledPane fx:id="titledPane" animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" text="Авторизация" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.itmo.kotlincollectionmanagerclient.controllers.LoginPageController">
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
         <PasswordField fx:id="passwordField" layoutX="121.0" layoutY="174.0" prefHeight="26.0" prefWidth="376.0" />
         <TextField fx:id="loginField" layoutX="121.0" layoutY="113.0" prefHeight="26.0" prefWidth="376.0" />
-        <Label layoutX="121.0" layoutY="87.0" text="Ваш логин" />
-        <Label layoutX="121.0" layoutY="150.0" text="Ваш пароль" />
+        <Label fx:id="labelLogin" layoutX="121.0" layoutY="87.0" text="Ваш логин" />
+        <Label fx:id="labelPassword" layoutX="121.0" layoutY="150.0" text="Ваш пароль" />
         <ButtonBar layoutX="160.0" layoutY="218.0" prefHeight="40.0" prefWidth="239.0">
             <buttons>
                 <Button fx:id="nextButton" defaultButton="true" mnemonicParsing="false" onAction="#login" text="Далее" textAlignment="CENTER" />
                 <Button fx:id="registerButton" mnemonicParsing="false" onAction="#goToRegister" text="Нет аккаунта" />
             </buttons>
         </ButtonBar>
+      <ChoiceBox fx:id="languageField" layoutX="434.0" layoutY="14.0" prefWidth="150.0" />
     </AnchorPane>
 </TitledPane>

@@ -7,6 +7,7 @@ import javafx.stage.Stage
 import javafx.util.Callback
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Component
+import java.util.ResourceBundle
 
 @Component
 class ViewManager(private val context: ApplicationContext) {
@@ -16,7 +17,7 @@ class ViewManager(private val context: ApplicationContext) {
         this.primaryStage = stage
     }
 
-    fun showPage(fxmlPath: String) {
+    fun showPage(fxmlPath: String, bundle: ResourceBundle) {
         val loader = FXMLLoader(javaClass.getResource(fxmlPath))
         loader.controllerFactory = Callback { clazz -> context.getBean(clazz) }
 
