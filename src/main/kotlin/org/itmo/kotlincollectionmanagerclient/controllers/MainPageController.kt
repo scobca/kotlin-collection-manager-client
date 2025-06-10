@@ -19,6 +19,7 @@ import org.itmo.kotlincollectionmanagerclient.api.dto.FlatDto
 import org.itmo.kotlincollectionmanagerclient.controllers.i18n.Localizer
 import org.itmo.kotlincollectionmanagerclient.controllers.router.ViewManager
 import org.itmo.kotlincollectionmanagerclient.services.CommandsService
+import org.itmo.kotlincollectionmanagerclient.storages.CurrentFlatStorage.setFlatId
 import org.itmo.kotlincollectionmanagerclient.storages.TokensStorage.getUsername
 import org.itmo.kotlincollectionmanagerclient.storages.TokensStorage.resetUserData
 import org.springframework.stereotype.Component
@@ -90,7 +91,8 @@ class MainPageController(
 
         tableView.selectionModel.selectedItemProperty().addListener { _, _, newValue ->
             if (newValue != null) {
-                println("Selected item: $newValue")
+                setFlatId(newValue.id)
+                router.showPage("/fxml/FlatPage.fxml", currentBundle)
             }
         }
 

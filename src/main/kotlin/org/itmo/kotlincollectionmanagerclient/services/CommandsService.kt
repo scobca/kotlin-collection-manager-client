@@ -35,6 +35,12 @@ class CommandsService(
         sendCommand("clear ${getAccessToken()}")
     }
 
+    fun remove(id: Long) {
+        val res = sendCommand("remove $id ${getAccessToken()}")
+        println(res)
+        if (res.contains("message=404")) throw NotFoundException("Flat with this id does not exist")
+    }
+
     fun getAveragePrice(): String {
         val resJson = sendCommand("getAveragePrice ${getAccessToken()}")
         val apiResponse = Json.decodeFromString<ApiResponse<String>>(resJson)
@@ -46,6 +52,7 @@ class CommandsService(
         if (serverWatcher.checkConnection()) {
             val response = tcpConnectionFactory.sendMessage(command)
 
+            println("$response sdkllskd command")
             if (response.contains("message=404")) throw NotFoundException()
             if (response.contains("message=401")) {
                 resetUserData()
