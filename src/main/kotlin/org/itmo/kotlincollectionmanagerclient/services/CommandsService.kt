@@ -4,6 +4,7 @@ import kotlinx.serialization.json.Json
 import org.itmo.kotlincollectionmanagerclient.api.ApiResponse
 import org.itmo.kotlincollectionmanagerclient.api.dto.FlatDto
 import org.itmo.kotlincollectionmanagerclient.exceptions.AuthenticationException
+import org.itmo.kotlincollectionmanagerclient.exceptions.DoubleRecordException
 import org.itmo.kotlincollectionmanagerclient.exceptions.NotFoundException
 import org.itmo.kotlincollectionmanagerclient.exceptions.ServerNotAvailableException
 import org.itmo.kotlincollectionmanagerclient.storages.TokensStorage.getAccessToken
@@ -22,6 +23,12 @@ class CommandsService(
         val apiResponse = Json.decodeFromString<ApiResponse<List<FlatDto>>>(resJson)
 
         return apiResponse.message
+    }
+
+    fun insert(body: String) {
+        val res = sendCommand("insert $body")
+        println(res)
+        if (res.contains("message=409")) throw DoubleRecordException("Flat with this id already exists")
     }
 
     private fun sendCommand(command: String): String {
