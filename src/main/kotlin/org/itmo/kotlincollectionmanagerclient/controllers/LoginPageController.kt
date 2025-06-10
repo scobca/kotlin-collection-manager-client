@@ -11,6 +11,7 @@ import org.itmo.kotlincollectionmanagerclient.controllers.i18n.Localizer
 import org.itmo.kotlincollectionmanagerclient.controllers.router.ViewManager
 import org.itmo.kotlincollectionmanagerclient.exceptions.BasicException
 import org.itmo.kotlincollectionmanagerclient.services.AuthService
+import org.itmo.kotlincollectionmanagerclient.storages.TokensStorage.setUsername
 import org.springframework.stereotype.Component
 import java.util.Locale
 import java.util.ResourceBundle
@@ -65,6 +66,7 @@ class LoginPageController(
     private fun login() {
         try {
             if (authService.login(loginField.text, passwordField.text)) {
+                setUsername(loginField.text)
                 router.showPage("/fxml/MainPage.fxml", currentBundle)
             }
         } catch (e: BasicException) {
