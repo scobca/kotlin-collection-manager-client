@@ -10,6 +10,7 @@ import javafx.collections.ObservableList
 import javafx.fxml.FXML
 import javafx.scene.control.Alert
 import javafx.scene.control.Button
+import javafx.scene.control.ButtonType
 import javafx.scene.control.ChoiceBox
 import javafx.scene.control.Label
 import javafx.scene.control.TableColumn
@@ -163,13 +164,30 @@ class MainPageController(
     fun removeIfLowerKey() {}
 
     @FXML
-    fun clear() {}
+    fun clear() {
+        val alert = Alert(Alert.AlertType.CONFIRMATION)
+        alert.title = "Warning"
+        alert.headerText = "Вы действительно хотите удалить все свои объекты коллекции?"
+        val res = alert.showAndWait()
+
+        if (res.isPresent && res.get() == ButtonType.OK) {
+            commandsService.clear()
+            router.showPage("/fxml/MainPage.fxml", currentBundle)
+        }
+    }
 
     @FXML
     fun replaceIfLower() {}
 
     @FXML
-    fun getAveragePrice() {}
+    fun getAveragePrice() {
+        val price = commandsService.getAveragePrice()
+
+        val alert = Alert(Alert.AlertType.INFORMATION)
+        alert.title = "Average Price"
+        alert.contentText = price
+        alert.showAndWait()
+    }
 
     @FXML
     fun filterContainsName() {}

@@ -31,6 +31,17 @@ class CommandsService(
         if (res.contains("message=409")) throw DoubleRecordException("Flat with this id already exists")
     }
 
+    fun clear() {
+        sendCommand("clear ${getAccessToken()}")
+    }
+
+    fun getAveragePrice(): String {
+        val resJson = sendCommand("getAveragePrice ${getAccessToken()}")
+        val apiResponse = Json.decodeFromString<ApiResponse<String>>(resJson)
+
+        return apiResponse.message
+    }
+
     private fun sendCommand(command: String): String {
         if (serverWatcher.checkConnection()) {
             val response = tcpConnectionFactory.sendMessage(command)
