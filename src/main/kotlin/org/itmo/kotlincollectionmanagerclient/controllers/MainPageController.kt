@@ -126,6 +126,16 @@ class MainPageController(
         houseNameLabel.text = currentBundle.getString("main.houseNameLabel")
         houseYearLabel.text = currentBundle.getString("main.houseYearLabel")
         numberOfFloorsLabel.text = currentBundle.getString("main.numberOfFloorsLabel")
+
+        insertButton.text = currentBundle.getString("main.insertButton")
+        updateButton.text = currentBundle.getString("main.updateButton")
+        removeIfLowerKeyButton.text = currentBundle.getString("main.removeIfLowerKeyButton")
+        removeAllByBalconyButton.text = currentBundle.getString("main.removeAllByBalconyButton")
+        removeButton.text = currentBundle.getString("main.removeButton")
+        clearButton.text = currentBundle.getString("main.clearButton")
+        replaceIfLowerButton.text = currentBundle.getString("main.replaceIfLowerButton")
+        getAveragePriceButton.text = currentBundle.getString("main.getAveragePriceButton")
+        filterContainsNameButton.text = currentBundle.getString("main.filterContainsNameButton")
     }
 
 
@@ -136,7 +146,9 @@ class MainPageController(
     }
 
     @FXML
-    fun insert() {}
+    fun insert() {
+        router.showPage("/fxml/InsertPage.fxml", currentBundle)
+    }
 
     @FXML
     fun update() {}
