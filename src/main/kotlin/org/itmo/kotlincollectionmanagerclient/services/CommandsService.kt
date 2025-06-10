@@ -1,0 +1,41 @@
+package org.itmo.kotlincollectionmanagerclient.services
+
+import kotlinx.serialization.json.Json
+import org.itmo.kotlincollectionmanagerclient.api.ApiResponse
+import org.itmo.kotlincollectionmanagerclient.api.dto.FlatDto
+import org.itmo.kotlincollectionmanagerclient.exceptions.AuthenticationException
+import org.itmo.kotlincollectionmanagerclient.exceptions.NotFoundException
+import org.itmo.kotlincollectionmanagerclient.exceptions.ServerNotAvailableException
+import org.itmo.kotlincollectionmanagerclient.storages.TokensStorage.getAccessToken
+import org.itmo.kotlincollectionmanagerclient.storages.TokensStorage.resetUserData
+import org.itmo.kotlincollectionmanagerclient.utils.ServerWatcherUtil
+import org.itmo.kotlincollectionmanagerclient.utils.TcpConnectionFactory
+import org.springframework.stereotype.Service
+
+@Service
+class CommandsService(
+    private val serverWatcher: ServerWatcherUtil,
+    private val tcpConnectionFactory: TcpConnectionFactory
+) {
+    fun getFlats(): List<FlatDto> {
+        val resJson = sendCommand("show ${getAccessToken()}")
+        val apiResponse = Json.decodeFromString<ApiResponse<List<FlatDto>>>(resJson)
+
+        return apiResponse.message
+    }
+
+    private fun sendCommand(command: String): String {
+        if (serverWatcher.checkConnection()) {
+            val response = tcpConnectionFactory.sendMessage(command)
+
+            if (response.contains("message=404")) throw NotFoundException()
+            if (response.contains("message=401")) {
+                resetUserData()
+                throw AuthenticationException("Your session is expired. Login again")
+            }
+
+            return response
+        }
+        throw ServerNotAvailableException()
+    }
+}
