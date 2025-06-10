@@ -2,14 +2,12 @@ package org.itmo.kotlincollectionmanagerclient.services
 
 import org.itmo.kotlincollectionmanagerclient.storages.TokensStorage
 import org.itmo.kotlincollectionmanagerclient.utils.InvokerLogic
-import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Service
 import java.util.Scanner
 
 @Service
 class InvokerService(
     private val invokerLogic: InvokerLogic,
-    @Lazy private val authInvoker: AuthInvoker,
 ) {
     private var runtime = true
 
@@ -24,7 +22,6 @@ class InvokerService(
             if (command == "logout") {
                 TokensStorage.setAccessToken(null)
                 TokensStorage.setRefreshToken(null)
-                authInvoker.run()
                 stop()
                 continue
             }
