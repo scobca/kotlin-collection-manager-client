@@ -8,6 +8,9 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.fxml.FXML
+import javafx.fxml.FXMLLoader
+import javafx.scene.Parent
+import javafx.scene.Scene
 import javafx.scene.control.Alert
 import javafx.scene.control.Button
 import javafx.scene.control.ButtonType
@@ -16,6 +19,8 @@ import javafx.scene.control.Label
 import javafx.scene.control.TableColumn
 import javafx.scene.control.TableRow
 import javafx.scene.control.TableView
+import javafx.stage.Modality
+import javafx.stage.Stage
 import org.itmo.kotlincollectionmanagerclient.api.dto.FlatDto
 import org.itmo.kotlincollectionmanagerclient.controllers.i18n.Localizer
 import org.itmo.kotlincollectionmanagerclient.controllers.router.ViewManager
@@ -24,6 +29,7 @@ import org.itmo.kotlincollectionmanagerclient.storages.CurrentFlatStorage.setFla
 import org.itmo.kotlincollectionmanagerclient.storages.FlatsStorage.setFlatsCollection
 import org.itmo.kotlincollectionmanagerclient.storages.TokensStorage.getUsername
 import org.itmo.kotlincollectionmanagerclient.storages.TokensStorage.resetUserData
+import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.stereotype.Component
 import java.util.Locale
 import java.util.ResourceBundle
@@ -32,7 +38,8 @@ import java.util.ResourceBundle
 class MainPageController(
     private val router: ViewManager,
     private val localizer: Localizer,
-    private val commandsService: CommandsService
+    private val commandsService: CommandsService,
+    private val applicationContext: ConfigurableApplicationContext,
 ) {
     @FXML private lateinit var menuLabel: Label
     @FXML private lateinit var collectionLabel: Label
@@ -179,7 +186,24 @@ class MainPageController(
     fun removeAllByBalcony() {}
 
     @FXML
-    fun removeIfLowerKey() {}
+    fun removeIfLowerKey() {
+        val loader = FXMLLoader(javaClass.getResource("/fxml/RemoveIfLowerPopup.fxml"))
+        loader.setControllerFactory { clazz ->
+            applicationContext.getBean(clazz)
+        }
+        val root = loader.load<Parent>()
+
+        val popupStage = Stage()
+        popupStage.scene = Scene(root)
+        popupStage.title = "Remove If Lower"
+        popupStage.initModality(Modality.APPLICATION_MODAL)
+        popupStage.isResizable = false
+
+        val controller = loader.getController<RemoveIfLowerPopupController>()
+        controller.setStage(popupStage)
+
+        popupStage.show()
+    }
 
     @FXML
     fun clear() {

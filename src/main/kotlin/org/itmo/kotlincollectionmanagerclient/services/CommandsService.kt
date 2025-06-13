@@ -45,6 +45,11 @@ class CommandsService(
         if (res.contains("message=404")) throw NotFoundException("Flat with this id does not exist")
     }
 
+    fun removeIfLower(id: Long) {
+        val res = sendCommand("removeIfLowerKey $id ${getAccessToken()}")
+        println(res)
+    }
+
     fun getAveragePrice(): String {
         val resJson = sendCommand("getAveragePrice ${getAccessToken()}")
         val apiResponse = Json.decodeFromString<ApiResponse<String>>(resJson)
