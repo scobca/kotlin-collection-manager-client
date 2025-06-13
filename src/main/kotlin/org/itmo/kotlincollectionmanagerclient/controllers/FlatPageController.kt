@@ -28,7 +28,6 @@ class FlatPageController(
     private val router: ViewManager
 ) {
     @FXML lateinit var backButton: Button
-    @FXML lateinit var replaceIfLowerButton: Button
     @FXML lateinit var removeButton: Button
     @FXML lateinit var updateButton: Button
 
@@ -136,7 +135,7 @@ class FlatPageController(
                 balconyField, numberOfRoomsField, nameField,
                 yearField, priceField, areaField,
                 xField, idField, furnishField,
-                updateButton, replaceIfLowerButton, removeButton
+                updateButton, removeButton
             ).forEach { field ->
                 field.isDisable = true
             }
@@ -164,7 +163,6 @@ class FlatPageController(
         numberOfFloorsLabel.text = currentBundle.getString("flat.numberOfFloors")
         updateButton.text = currentBundle.getString("flat.update")
         removeButton.text = currentBundle.getString("flat.remove")
-        replaceIfLowerButton.text = currentBundle.getString("flat.replaceIfLower")
         backButton.text = currentBundle.getString("flat.back")
     }
 

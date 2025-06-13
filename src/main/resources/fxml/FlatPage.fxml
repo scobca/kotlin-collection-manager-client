@@ -39,7 +39,6 @@
                 <buttons>
                     <Button fx:id="updateButton" mnemonicParsing="false" onAction="#update" text="Update" />
                     <Button fx:id="removeButton" mnemonicParsing="false" onAction="#remove" text="Remove" />
-                    <Button fx:id="replaceIfLowerButton" mnemonicParsing="false" onAction="#replace" prefHeight="26.0" prefWidth="121.0" text="Replace if lower" />
                 </buttons>
             </ButtonBar>
          <ChoiceBox fx:id="balconyField" layoutX="328.0" layoutY="204.0" prefHeight="26.0" prefWidth="159.0" />
