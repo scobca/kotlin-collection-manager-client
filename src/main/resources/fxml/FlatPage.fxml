@@ -34,7 +34,7 @@
             <Label fx:id="balconyLabel" layoutX="330.0" layoutY="185.0" text="Balcony" />
             <Label fx:id="houseNameLabel" layoutX="330.0" layoutY="230.0" text="House name" />
             <Label fx:id="numberOfFloorsLabel" layoutX="330.0" layoutY="270.0" text="Number of floors" />
-            <Label fx:id="flatUserLabel" layoutX="67.0" layoutY="12.0" prefHeight="25.0" prefWidth="199.0" text="Flat user:" />
+            <Label fx:id="flatUserLabel" layoutX="67.0" layoutY="12.0" prefHeight="25.0" prefWidth="348.0" text="Flat user:" />
             <ChoiceBox fx:id="furnishField" layoutX="112.0" layoutY="244.0" prefHeight="26.0" prefWidth="159.0" />
             <ButtonBar layoutX="71.0" layoutY="320.0" prefHeight="40.0" prefWidth="417.0">
                 <buttons>

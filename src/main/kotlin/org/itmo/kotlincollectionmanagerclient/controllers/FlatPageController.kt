@@ -62,12 +62,6 @@ class FlatPageController(
 
     @FXML
     fun initialize() {
-        val flats = commandsService.getFlats().filter { flat -> flat.id == getFlatId() }
-        fillGaps(flats[0])
-        blockFields(flats[0])
-
-        furnishField.getItems().addAll(Furnish.DESIGNER, Furnish.FINE, Furnish.LITTLE)
-
         languageField.getItems().addAll("ru", "no", "es", "el")
         languageField.value = localizer.getLanguage()
 
@@ -79,13 +73,20 @@ class FlatPageController(
             localizer.setLanguage(selected.toString())
             localizer.updateLocalization("/fxml/FlatPage.fxml")
         }
+
+        val flats = commandsService.getFlats().filter { flat -> flat.id == getFlatId() }
+        fillGaps(flats[0])
+        blockFields(flats[0])
+
+        furnishField.getItems().addAll(Furnish.DESIGNER, Furnish.FINE, Furnish.LITTLE)
     }
 
     fun fillGaps(flat: FlatDto) {
         if (flat.user.email == getUsername()) {
-            flatUserLabel.text = "Flat user: ${getUsername()} (you)"
+            flatUserLabel.text = "${currentBundle.getString("flat.flatUser")}: ${getUsername()} (${
+                currentBundle.getString("flat.youFlatUser")})"
         } else {
-            flatUserLabel.text = "Flat user: ${flat.user.email.toString()}"
+            flatUserLabel.text = "${currentBundle.getString("flat.flatUser")}: ${flat.user.email}"
         }
 
         idField.text = flat.id.toString()
@@ -143,7 +144,6 @@ class FlatPageController(
         balconyLabel.text = currentBundle.getString("flat.balcony")
         houseNameLabel.text = currentBundle.getString("flat.houseName")
         numberOfFloorsLabel.text = currentBundle.getString("flat.numberOfFloors")
-        flatUserLabel.text = currentBundle.getString("flat.flatUser")
         updateButton.text = currentBundle.getString("flat.update")
         removeButton.text = currentBundle.getString("flat.remove")
         replaceIfLowerButton.text = currentBundle.getString("flat.replaceIfLower")
