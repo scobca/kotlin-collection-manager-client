@@ -30,6 +30,7 @@ class AuthService(
             if (response.startsWith("UserTokensDto")) {
                 TokensStorage.setAccessToken(accessToken)
                 TokensStorage.setRefreshToken(refreshToken)
+                TokensStorage.setUsername(login)
 
                 return true
             } else {
