@@ -103,7 +103,7 @@ class MainPageController(
     lateinit var numberOfFloorsLabel: TableColumn<FlatDto, Long>
 
     @FXML
-    lateinit var filterContainsNameButton: Button
+    lateinit var removeIfLowerKeyButton: Button
 
     @FXML
     lateinit var getAveragePriceButton: Button
@@ -217,7 +217,7 @@ class MainPageController(
         removeAllByBalconyButton.text = currentBundle.getString("main.removeAllByBalconyButton")
         clearButton.text = currentBundle.getString("main.clearButton")
         getAveragePriceButton.text = currentBundle.getString("main.getAveragePriceButton")
-        filterContainsNameButton.text = currentBundle.getString("main.filterContainsNameButton")
+        removeIfLowerKeyButton.text = currentBundle.getString("main.removeIfLowerKeyButton")
     }
 
 
@@ -234,6 +234,22 @@ class MainPageController(
 
     @FXML
     fun removeAllByBalcony() {
+        val loader = FXMLLoader(javaClass.getResource("/fxml/RemoveAllByBalcony.fxml"))
+        loader.setControllerFactory { clazz ->
+            applicationContext.getBean(clazz)
+        }
+        val root = loader.load<Parent>()
+
+        val popupStage = Stage()
+        popupStage.scene = Scene(root)
+        popupStage.title = "Remove All By Balcony"
+        popupStage.initModality(Modality.APPLICATION_MODAL)
+        popupStage.isResizable = false
+
+        val controller = loader.getController<RemoveByBalconyController>()
+        controller.setStage(popupStage)
+
+        popupStage.show()
     }
 
     @FXML

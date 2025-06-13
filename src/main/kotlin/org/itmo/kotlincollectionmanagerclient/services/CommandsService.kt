@@ -50,6 +50,11 @@ class CommandsService(
         println(res)
     }
 
+    fun removeByBalcony(balconyType: Boolean) {
+        val res = sendCommand("removeAllByBalcony $balconyType ${getAccessToken()}")
+        println(res)
+    }
+
     fun getAveragePrice(): String {
         val resJson = sendCommand("getAveragePrice ${getAccessToken()}")
         val apiResponse = Json.decodeFromString<ApiResponse<String>>(resJson)

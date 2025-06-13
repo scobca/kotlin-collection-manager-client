@@ -84,7 +84,7 @@
             <buttons>
                <Button fx:id="clearButton" mnemonicParsing="false" onAction="#clear" text="clear" />
                <Button fx:id="getAveragePriceButton" mnemonicParsing="false" onAction="#getAveragePrice" text="getAveragePrice" />
-               <Button fx:id="filterContainsNameButton" mnemonicParsing="false" onAction="#filterContainsName" prefHeight="26.0" prefWidth="202.0" text="filterContainsName" />
+               <Button fx:id="removeIfLowerKeyButton" mnemonicParsing="false" onAction="#removeIfLowerKey" prefHeight="26.0" prefWidth="202.0" text="filterContainsName" />
             </buttons>
          </ButtonBar>
          <Label fx:id="filterLabel" layoutX="24.0" layoutY="161.0" prefHeight="17.0" prefWidth="109.0" text="Filter" />
