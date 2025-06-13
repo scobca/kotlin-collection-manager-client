@@ -8,6 +8,7 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
@@ -73,10 +74,9 @@
          </Label>
          <Button fx:id="logoutButton" layoutX="631.0" layoutY="15.0" mnemonicParsing="false" onAction="#logout" prefHeight="26.0" prefWidth="79.0" text="Выйти" />
          <ChoiceBox fx:id="languageField" layoutX="725.0" layoutY="15.0" prefWidth="150.0" />
-         <ButtonBar layoutX="-80.0" layoutY="41.0" prefHeight="54.0" prefWidth="846.0">
+         <ButtonBar layoutX="-183.0" layoutY="45.0" prefHeight="54.0" prefWidth="846.0">
            <buttons>
              <Button fx:id="insertButton" mnemonicParsing="false" onAction="#insert" text="insert" />
-               <Button fx:id="removeIfLowerKeyButton" mnemonicParsing="false" onAction="#removeIfLowerKey" prefHeight="26.0" prefWidth="202.0" text="removeIfLowerKey" />
                <Button fx:id="removeAllByBalconyButton" mnemonicParsing="false" onAction="#removeAllByBalcony" prefHeight="26.0" prefWidth="202.0" text="removeAllByBalcony" />
            </buttons>
          </ButtonBar>
@@ -87,6 +87,8 @@
                <Button fx:id="filterContainsNameButton" mnemonicParsing="false" onAction="#filterContainsName" prefHeight="26.0" prefWidth="202.0" text="filterContainsName" />
             </buttons>
          </ButtonBar>
+         <Label fx:id="filterLabel" layoutX="24.0" layoutY="161.0" prefHeight="17.0" prefWidth="109.0" text="Filter" />
+         <TextField fx:id="filterParam" layoutX="118.0" layoutY="157.0" prefHeight="26.0" prefWidth="714.0" />
       </children>
    </AnchorPane>
 </VBox>

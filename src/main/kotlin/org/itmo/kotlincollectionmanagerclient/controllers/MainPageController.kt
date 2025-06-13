@@ -19,6 +19,7 @@ import javafx.scene.control.Label
 import javafx.scene.control.TableColumn
 import javafx.scene.control.TableRow
 import javafx.scene.control.TableView
+import javafx.scene.control.TextField
 import javafx.stage.Modality
 import javafx.stage.Stage
 import org.itmo.kotlincollectionmanagerclient.api.dto.FlatDto
@@ -41,32 +42,80 @@ class MainPageController(
     private val commandsService: CommandsService,
     private val applicationContext: ConfigurableApplicationContext,
 ) {
-    @FXML private lateinit var menuLabel: Label
-    @FXML private lateinit var collectionLabel: Label
-    @FXML private lateinit var tableView: TableView<FlatDto>
-    @FXML lateinit var logoutButton: Button
-    @FXML lateinit var userLabel: Label
-    @FXML lateinit var languageField: ChoiceBox<String>
+    @FXML
+    lateinit var filterParam: TextField
 
-    @FXML lateinit var idLabel: TableColumn<FlatDto, Long>
-    @FXML lateinit var flatNameLabel: TableColumn<FlatDto, String>
-    @FXML lateinit var xCordLabel: TableColumn<FlatDto, Long>
-    @FXML lateinit var yCordLabel: TableColumn<FlatDto, Float>
-    @FXML lateinit var flatAreaLabel: TableColumn<FlatDto, Long>
-    @FXML lateinit var numberOfRoomsLabel: TableColumn<FlatDto, Long>
-    @FXML lateinit var priceLabel: TableColumn<FlatDto, Long>
-    @FXML lateinit var balconyLabel: TableColumn<FlatDto, Boolean>
-    @FXML lateinit var furnishLabel: TableColumn<FlatDto, String>
-    @FXML lateinit var houseNameLabel: TableColumn<FlatDto, String>
-    @FXML lateinit var houseYearLabel: TableColumn<FlatDto, Int>
-    @FXML lateinit var numberOfFloorsLabel: TableColumn<FlatDto, Long>
+    @FXML
+    lateinit var filterLabel: Label
 
-    @FXML lateinit var filterContainsNameButton: Button
-    @FXML lateinit var getAveragePriceButton: Button
-    @FXML lateinit var clearButton: Button
-    @FXML lateinit var removeAllByBalconyButton: Button
-    @FXML lateinit var removeIfLowerKeyButton: Button
-    @FXML lateinit var insertButton: Button
+    @FXML
+    private lateinit var menuLabel: Label
+
+    @FXML
+    private lateinit var collectionLabel: Label
+
+    @FXML
+    private lateinit var tableView: TableView<FlatDto>
+
+    @FXML
+    lateinit var logoutButton: Button
+
+    @FXML
+    lateinit var userLabel: Label
+
+    @FXML
+    lateinit var languageField: ChoiceBox<String>
+
+    @FXML
+    lateinit var idLabel: TableColumn<FlatDto, Long>
+
+    @FXML
+    lateinit var flatNameLabel: TableColumn<FlatDto, String>
+
+    @FXML
+    lateinit var xCordLabel: TableColumn<FlatDto, Long>
+
+    @FXML
+    lateinit var yCordLabel: TableColumn<FlatDto, Float>
+
+    @FXML
+    lateinit var flatAreaLabel: TableColumn<FlatDto, Long>
+
+    @FXML
+    lateinit var numberOfRoomsLabel: TableColumn<FlatDto, Long>
+
+    @FXML
+    lateinit var priceLabel: TableColumn<FlatDto, Long>
+
+    @FXML
+    lateinit var balconyLabel: TableColumn<FlatDto, Boolean>
+
+    @FXML
+    lateinit var furnishLabel: TableColumn<FlatDto, String>
+
+    @FXML
+    lateinit var houseNameLabel: TableColumn<FlatDto, String>
+
+    @FXML
+    lateinit var houseYearLabel: TableColumn<FlatDto, Int>
+
+    @FXML
+    lateinit var numberOfFloorsLabel: TableColumn<FlatDto, Long>
+
+    @FXML
+    lateinit var filterContainsNameButton: Button
+
+    @FXML
+    lateinit var getAveragePriceButton: Button
+
+    @FXML
+    lateinit var clearButton: Button
+
+    @FXML
+    lateinit var removeAllByBalconyButton: Button
+
+    @FXML
+    lateinit var insertButton: Button
 
     private lateinit var currentBundle: ResourceBundle
 
@@ -89,7 +138,7 @@ class MainPageController(
         numberOfFloorsLabel.setCellValueFactory { SimpleLongProperty(it.value.house.numberOfFloors).asObject() }
 
         try {
-            val flats : ObservableList<FlatDto> =
+            val flats: ObservableList<FlatDto> =
                 FXCollections.observableArrayList(commandsService.getFlats().sortedBy { it.id })
 
             setFlatsCollection(flats)
@@ -124,6 +173,8 @@ class MainPageController(
                 router.showPage("/fxml/FlatPage.fxml", currentBundle)
             }
         }
+
+        filterParam.textProperty().addListener { _, _, _ -> filterContainsName() }
 
         languageField.getItems().addAll("ru", "no", "es", "el")
         languageField.value = localizer.getLanguage()
@@ -163,7 +214,6 @@ class MainPageController(
         numberOfFloorsLabel.text = currentBundle.getString("main.numberOfFloorsLabel")
 
         insertButton.text = currentBundle.getString("main.insertButton")
-        removeIfLowerKeyButton.text = currentBundle.getString("main.removeIfLowerKeyButton")
         removeAllByBalconyButton.text = currentBundle.getString("main.removeAllByBalconyButton")
         clearButton.text = currentBundle.getString("main.clearButton")
         getAveragePriceButton.text = currentBundle.getString("main.getAveragePriceButton")
@@ -183,7 +233,8 @@ class MainPageController(
     }
 
     @FXML
-    fun removeAllByBalcony() {}
+    fun removeAllByBalcony() {
+    }
 
     @FXML
     fun removeIfLowerKey() {
@@ -229,5 +280,20 @@ class MainPageController(
     }
 
     @FXML
-    fun filterContainsName() {}
+    fun filterContainsName() {
+        if (!filterParam.text.isEmpty()) {
+            val flats: ObservableList<FlatDto> =
+                FXCollections.observableArrayList(
+                    commandsService.getFlats()
+                        .filter { it.name.contains(filterParam.text.replace(" ", "_"), ignoreCase = true) }
+                        .sortedBy { it.id })
+
+            tableView.items = flats
+        } else {
+            val flats: ObservableList<FlatDto> =
+                FXCollections.observableArrayList(commandsService.getFlats().sortedBy { it.id })
+
+            tableView.items = flats
+        }
+    }
 }
