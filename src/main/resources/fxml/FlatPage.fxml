@@ -20,7 +20,6 @@
             <TextField fx:id="nameField" layoutX="328.0" layoutY="78.0" />
             <TextField fx:id="yField" layoutX="328.0" layoutY="117.0" />
             <TextField fx:id="numberOfRoomsField" layoutX="328.0" layoutY="159.0" />
-            <TextField fx:id="balconyField" layoutX="328.0" layoutY="204.0" />
             <TextField fx:id="houseNameField" layoutX="328.0" layoutY="244.0" />
             <TextField fx:id="numberOfFloorsField" layoutX="328.0" layoutY="287.0" />
             <Label layoutX="113.0" layoutY="103.0" text="Coordinates X" fx:id="xLabel" />
@@ -43,6 +42,7 @@
                     <Button fx:id="replaceIfLowerButton" mnemonicParsing="false" onAction="#replace" prefHeight="26.0" prefWidth="121.0" text="Replace if lower" />
                 </buttons>
             </ButtonBar>
+         <ChoiceBox fx:id="balconyField" layoutX="328.0" layoutY="204.0" prefHeight="26.0" prefWidth="159.0" />
         </AnchorPane>
         <Button fx:id="backButton" layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
         <ChoiceBox fx:id="languageField" layoutX="428.0" layoutY="11.0" prefWidth="150.0" />

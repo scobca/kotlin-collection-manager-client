@@ -178,9 +178,7 @@ class InsertPageController(
             alert.headerText = "Повторите ввод данных в корректном формате!"
             val res = alert.showAndWait()
 
-            if (res == ButtonType.OK) {
-                alert.close()
-            }
+            if (res == ButtonType.OK) alert.close()
         } else {
             val body =
                 "[${idField.text},${nameField.text.replace(" ", "_").trim()},${xField.text},${yField.text}," +

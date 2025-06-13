@@ -14,7 +14,9 @@ import org.itmo.kotlincollectionmanagerclient.controllers.router.ViewManager
 import org.itmo.kotlincollectionmanagerclient.services.CommandsService
 import org.itmo.kotlincollectionmanagerclient.storages.CurrentFlatStorage.clearFlatStorage
 import org.itmo.kotlincollectionmanagerclient.storages.CurrentFlatStorage.getFlatId
+import org.itmo.kotlincollectionmanagerclient.storages.TokensStorage
 import org.itmo.kotlincollectionmanagerclient.storages.TokensStorage.getUsername
+import org.itmo.kotlincollectionmanagerclient.validators.checkFieldsTypesValid
 import org.springframework.stereotype.Component
 import java.util.Locale
 import java.util.ResourceBundle
@@ -49,7 +51,7 @@ class FlatPageController(
     @FXML lateinit var numberOfFloorsField: TextField
     @FXML lateinit var yField: TextField
     @FXML lateinit var houseNameField: TextField
-    @FXML lateinit var balconyField: TextField
+    @FXML lateinit var balconyField: ChoiceBox<Boolean>
     @FXML lateinit var numberOfRoomsField: TextField
     @FXML lateinit var nameField: TextField
     @FXML lateinit var yearField: TextField
@@ -79,13 +81,36 @@ class FlatPageController(
         blockFields(flats[0])
 
         furnishField.getItems().addAll(Furnish.DESIGNER, Furnish.FINE, Furnish.LITTLE)
+        balconyField.getItems().addAll(true, false)
+
         idField.isDisable = true
+        updateButton.isDisable = true
+
+        listOf(
+            numberOfFloorsField, yField, houseNameField, numberOfRoomsField,
+            nameField, yearField, priceField, areaField, xField, idField
+        ).forEach { field ->
+            field.textProperty().addListener { _, oldValue, newValue ->
+                if (oldValue != newValue) {
+                    updateButton.isDisable = false
+                }
+            }
+        }
+
+        listOf(furnishField, balconyField).forEach { choiceBox ->
+            choiceBox.valueProperty().addListener { _, oldValue, newValue ->
+                if (oldValue != newValue) {
+                    updateButton.isDisable = false
+                }
+            }
+        }
     }
 
     fun fillGaps(flat: FlatDto) {
         if (flat.user.email == getUsername()) {
             flatUserLabel.text = "${currentBundle.getString("flat.flatUser")}: ${getUsername()} (${
-                currentBundle.getString("flat.youFlatUser")})"
+                currentBundle.getString("flat.youFlatUser")
+            })"
         } else {
             flatUserLabel.text = "${currentBundle.getString("flat.flatUser")}: ${flat.user.email}"
         }
@@ -97,7 +122,7 @@ class FlatPageController(
         areaField.text = flat.area.toString()
         numberOfRoomsField.text = flat.numberOfRooms.toString()
         priceField.text = flat.price.toString()
-        balconyField.text = flat.balcony.toString()
+        balconyField.value = flat.balcony
         furnishField.value = flat.furnish
         houseNameField.text = flat.house.name
         yearField.text = flat.house.year.toString()
@@ -106,23 +131,15 @@ class FlatPageController(
 
     fun blockFields(flat: FlatDto) {
         if (flat.user.email != getUsername()) {
-            idField.isDisable = true
-            idField.isDisable = true
-            nameField.isDisable = true
-            xField.isDisable = true
-            yField.isDisable = true
-            areaField.isDisable = true
-            numberOfRoomsField.isDisable = true
-            priceField.isDisable = true
-            balconyField.isDisable = true
-            furnishField.isDisable = true
-            houseNameField.isDisable = true
-            yearField.isDisable = true
-            numberOfFloorsField.isDisable = true
-
-            updateButton.isDisable = true
-            replaceIfLowerButton.isDisable = true
-            removeButton.isDisable = true
+            listOf(
+                numberOfFloorsField, yField, houseNameField,
+                balconyField, numberOfRoomsField, nameField,
+                yearField, priceField, areaField,
+                xField, idField, furnishField,
+                updateButton, replaceIfLowerButton, removeButton
+            ).forEach { field ->
+                field.isDisable = true
+            }
         }
     }
 
@@ -151,7 +168,47 @@ class FlatPageController(
         backButton.text = currentBundle.getString("flat.back")
     }
 
-    fun update() {}
+    fun update() {
+        if (!checkFieldsTypesValid(
+                idField,
+                xField,
+                yField,
+                areaField,
+                numberOfRoomsField,
+                priceField,
+                yearField,
+                numberOfFloorsField,
+                nameField,
+                houseNameField,
+                balconyField,
+                furnishField
+            )) {
+            val alert = Alert(Alert.AlertType.ERROR)
+            alert.title = "Ошибка в данных"
+            alert.headerText = "Повторите ввод данных в корректном формате!"
+            val res = alert.showAndWait()
+
+            if (res == ButtonType.OK) alert.close()
+        } else {
+            val body =
+                "[${idField.text},${nameField.text.replace(" ", "_").trim()},${xField.text},${yField.text}," +
+                        "${areaField.text},${numberOfRoomsField.text},${priceField.text},${balconyField.value}," +
+                        "${furnishField.value},${
+                            houseNameField.text.replace(" ", "_").trim()
+                        },${yearField.text},${numberOfFloorsField.text}," +
+                        "${TokensStorage.getAccessToken()}]"
+
+            try {
+                commandsService.update(body)
+                router.showPage("/fxml/MainPage.fxml", currentBundle)
+            } catch (e: Exception) {
+                val alert = Alert(Alert.AlertType.ERROR)
+                alert.title = "Error"
+                alert.headerText = e.message
+                alert.showAndWait()
+            }
+        }
+    }
 
     fun remove() {
         val alert = Alert(Alert.AlertType.WARNING)

@@ -27,8 +27,12 @@ class CommandsService(
 
     fun insert(body: String) {
         val res = sendCommand("insert $body")
-        println(res)
         if (res.contains("message=409")) throw DoubleRecordException("Flat with this id already exists")
+    }
+
+    fun update(body: String) {
+        val res = sendCommand("update $body")
+        if (!res.contains("message=200")) println(res)
     }
 
     fun clear() {
