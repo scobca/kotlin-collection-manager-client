@@ -3,6 +3,7 @@ package org.itmo.kotlincollectionmanagerclient.controllers
 import javafx.fxml.FXML
 import javafx.scene.control.Alert
 import javafx.scene.control.Button
+import javafx.scene.control.ButtonType
 import javafx.scene.control.ChoiceBox
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
@@ -11,10 +12,12 @@ import org.itmo.kotlincollectionmanagerclient.collection.Furnish
 import org.itmo.kotlincollectionmanagerclient.controllers.i18n.Localizer
 import org.itmo.kotlincollectionmanagerclient.controllers.router.ViewManager
 import org.itmo.kotlincollectionmanagerclient.services.CommandsService
+import org.itmo.kotlincollectionmanagerclient.storages.FlatsStorage.getFlatsCollection
 import org.itmo.kotlincollectionmanagerclient.storages.TokensStorage
 import org.springframework.stereotype.Component
 import java.util.Locale
 import java.util.ResourceBundle
+import kotlin.random.Random
 
 @Component
 class InsertPageController(
@@ -123,6 +126,10 @@ class InsertPageController(
             localizer.setLanguage(selected.toString())
             localizer.updateLocalization("/fxml/InsertPage.fxml")
         }
+
+        idField.setOnAction {_ -> checkIdValid()}
+        idField.focusedProperty().addListener { _, oldValue, newValue -> if (oldValue != newValue) checkIdValid() }
+
     }
 
     private fun updateBundle(locale: Locale) {
@@ -151,9 +158,11 @@ class InsertPageController(
     @FXML
     fun create() {
         val body =
-            "[${idField.text},${nameField.text},${xField.text},${yField.text}," +
+            "[${idField.text},${nameField.text.replace(" ", "_").trim()},${xField.text},${yField.text}," +
                     "${areaField.text},${numberOfRoomsField.text},${priceField.text},${balconyField.text}," +
-                    "${furnishField.value},${houseNameField.text},${yearField.text},${numberOfFloorsField.text}," +
+                    "${furnishField.value},${
+                        houseNameField.text.replace(" ", "_").trim()
+                    },${yearField.text},${numberOfFloorsField.text}," +
                     "${TokensStorage.getAccessToken()}]"
 
         try {
@@ -170,5 +179,29 @@ class InsertPageController(
     @FXML
     fun goBack() {
         router.showPage("/fxml/MainPage.fxml", currentBundle)
+    }
+
+    private fun checkIdValid() {
+        val collection = getFlatsCollection()
+        val inputId = idField.text.toLongOrNull()
+
+        if (inputId != null && collection.any { it.id == inputId }) {
+            idField.clear()
+
+            val alert = Alert(Alert.AlertType.WARNING).apply {
+                title = "Неуникальный ИД"
+                headerText = "Такой ИД уже есть, сгенерировать новый?"
+                buttonTypes.setAll(ButtonType("Да"), ButtonType("Нет"))
+            }
+
+            alert.showAndWait().filter { it.text == "Да" }.ifPresent {
+                var newId: Long
+                do {
+                    newId = Random.nextLong(1, 100000)
+                } while (collection.any { flat -> flat.id == newId })
+
+                idField.text = newId.toString()
+            }
+        }
     }
 }

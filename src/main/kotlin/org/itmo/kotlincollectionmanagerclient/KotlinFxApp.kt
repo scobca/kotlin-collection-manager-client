@@ -5,6 +5,8 @@ import javafx.application.Platform
 import javafx.stage.Stage
 import org.itmo.kotlincollectionmanagerclient.controllers.i18n.Localizer
 import org.itmo.kotlincollectionmanagerclient.controllers.router.ViewManager
+import org.itmo.kotlincollectionmanagerclient.services.CommandsService
+import org.itmo.kotlincollectionmanagerclient.storages.FlatsStorage.setFlatsCollection
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.stereotype.Component
@@ -18,6 +20,9 @@ class KotlinFxApp : Application() {
         context = SpringApplicationBuilder(KotlinCollectionManagerClientApplication::class.java)
             .headless(false)
             .run()
+
+        val commandsService = context.getBean(CommandsService::class.java)
+        setFlatsCollection(commandsService.getFlats())
     }
 
     override fun start(primaryStage: Stage) {
