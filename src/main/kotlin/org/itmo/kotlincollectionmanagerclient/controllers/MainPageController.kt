@@ -14,6 +14,7 @@ import javafx.scene.control.ButtonType
 import javafx.scene.control.ChoiceBox
 import javafx.scene.control.Label
 import javafx.scene.control.TableColumn
+import javafx.scene.control.TableRow
 import javafx.scene.control.TableView
 import org.itmo.kotlincollectionmanagerclient.api.dto.FlatDto
 import org.itmo.kotlincollectionmanagerclient.controllers.i18n.Localizer
@@ -80,13 +81,32 @@ class MainPageController(
         numberOfFloorsLabel.setCellValueFactory { SimpleLongProperty(it.value.house.numberOfFloors).asObject() }
 
         try {
-            val flats : ObservableList<FlatDto> = FXCollections.observableArrayList(commandsService.getFlats().sortedBy { it.id })
+            val flats : ObservableList<FlatDto> =
+                FXCollections.observableArrayList(commandsService.getFlats().sortedBy { it.id })
+
             tableView.items = flats
         } catch (e: Exception) {
             val alert = Alert(Alert.AlertType.ERROR)
             alert.title = "Error"
             alert.headerText = e.message
             alert.showAndWait()
+        }
+
+        tableView.setRowFactory {
+            object : TableRow<FlatDto>() {
+                override fun updateItem(item: FlatDto?, empty: Boolean) {
+                    super.updateItem(item, empty)
+                    style = if (item == null || empty) {
+                        ""
+                    } else {
+                        if (item.user.email == getUsername()) {
+                            "-fx-background-color: lightgreen;"
+                        } else {
+                            ""
+                        }
+                    }
+                }
+            }
         }
 
         tableView.selectionModel.selectedItemProperty().addListener { _, _, newValue ->
