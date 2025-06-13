@@ -79,6 +79,7 @@ class FlatPageController(
         blockFields(flats[0])
 
         furnishField.getItems().addAll(Furnish.DESIGNER, Furnish.FINE, Furnish.LITTLE)
+        idField.isDisable = true
     }
 
     fun fillGaps(flat: FlatDto) {
