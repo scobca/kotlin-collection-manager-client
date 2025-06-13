@@ -14,6 +14,7 @@ import org.itmo.kotlincollectionmanagerclient.controllers.router.ViewManager
 import org.itmo.kotlincollectionmanagerclient.services.CommandsService
 import org.itmo.kotlincollectionmanagerclient.storages.FlatsStorage.getFlatsCollection
 import org.itmo.kotlincollectionmanagerclient.storages.TokensStorage
+import org.itmo.kotlincollectionmanagerclient.validators.checkFieldsTypesValid
 import org.springframework.stereotype.Component
 import java.util.Locale
 import java.util.ResourceBundle
@@ -158,7 +159,20 @@ class InsertPageController(
 
     @FXML
     fun create() {
-        if (!checkTypesValid()) {
+        if (!checkFieldsTypesValid(
+                idField,
+                xField,
+                yField,
+                areaField,
+                numberOfRoomsField,
+                priceField,
+                yearField,
+                numberOfFloorsField,
+                nameField,
+                houseNameField,
+                balconyField,
+                furnishField
+            )) {
             val alert = Alert(Alert.AlertType.ERROR)
             alert.title = "Ошибка в данных"
             alert.headerText = "Повторите ввод данных в корректном формате!"
@@ -215,51 +229,5 @@ class InsertPageController(
                 idField.text = newId.toString()
             }
         }
-    }
-
-    private fun checkTypesValid(): Boolean {
-        var mistakes = 0
-        val fieldsToCheck = listOf(
-            idField to { text: String -> text.toLongOrNull() },
-            xField to { text: String -> text.toLongOrNull() },
-            yField to { text: String -> text.toFloatOrNull() },
-            areaField to { text: String -> text.toLongOrNull() },
-            numberOfRoomsField to { text: String -> text.toLongOrNull() },
-            priceField to { text: String -> text.toLongOrNull() },
-            yearField to { text: String -> text.toLongOrNull() },
-            numberOfFloorsField to { text: String -> text.toLongOrNull() },
-        )
-
-        fieldsToCheck.forEach { (field, parseFunc) ->
-            if (parseFunc(field.text) == null) {
-                field.clear()
-                field.style = "-fx-border-color: red;"
-                mistakes++
-            } else {
-                field.style = ""
-            }
-        }
-
-        val textFieldsToCheck = listOf(nameField, houseNameField)
-        textFieldsToCheck.forEach { field ->
-            if (field.text.isBlank()) {
-                field.style = "-fx-border-color: red;"
-                mistakes++
-            } else {
-                field.style = ""
-            }
-        }
-
-        val choiceBoxesToCheck = listOf(balconyField, furnishField)
-        choiceBoxesToCheck.forEach { choiceBox ->
-            if (choiceBox.value == null) {
-                choiceBox.style = "-fx-border-color: red;"
-                mistakes++
-            } else {
-                choiceBox.style = ""
-            }
-        }
-
-        return mistakes == 0
     }
 }
