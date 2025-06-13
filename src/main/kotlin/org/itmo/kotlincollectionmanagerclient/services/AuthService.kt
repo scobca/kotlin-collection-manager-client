@@ -33,7 +33,6 @@ class AuthService(
 
                 return true
             } else {
-                println(response)
                 if (response.contains("message=401") || response.contains("message=404")) {
                     throw AuthenticationException("Username or password invalid")
                 }

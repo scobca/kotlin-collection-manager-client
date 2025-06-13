@@ -51,8 +51,6 @@ class CommandsService(
     private fun sendCommand(command: String): String {
         if (serverWatcher.checkConnection()) {
             val response = tcpConnectionFactory.sendMessage(command)
-
-            println("$response sdkllskd command")
             if (response.contains("message=404")) throw NotFoundException()
             if (response.contains("message=401")) {
                 resetUserData()
