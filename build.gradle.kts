@@ -3,8 +3,10 @@ plugins {
     kotlin("plugin.spring") version "1.9.25"
     kotlin("plugin.serialization") version "2.1.20"
     id("org.springframework.boot") version "3.4.3"
+    id("org.openjfx.javafxplugin") version "0.0.13"
     id("io.spring.dependency-management") version "1.1.7"
     id("it.nicolasfarabegoli.conventional-commits") version "3.1.3"
+    application
 }
 
 group = "org.itmo"
@@ -59,12 +61,21 @@ dependencies {
 
     // Utilities
     implementation("one.stayfocused.spring:dotenv-spring-boot:1.0.0")
+
+    // JavaFX
+    implementation("org.openjfx:javafx-controls:21")
+    implementation("org.openjfx:javafx-fxml:21")
 }
 
 kotlin {
     compilerOptions {
         freeCompilerArgs.addAll("-Xjsr305=strict")
     }
+}
+
+javafx {
+    version = "21"
+    modules("javafx.controls", "javafx.fxml")
 }
 
 conventionalCommits {
