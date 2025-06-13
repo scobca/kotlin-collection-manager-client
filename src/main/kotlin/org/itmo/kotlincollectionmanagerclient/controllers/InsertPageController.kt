@@ -95,7 +95,7 @@ class InsertPageController(
     lateinit var houseNameField: TextField
 
     @FXML
-    lateinit var balconyField: TextField
+    lateinit var balconyField: ChoiceBox<Boolean>
 
     @FXML
     lateinit var numberOfRoomsField: TextField
@@ -114,6 +114,7 @@ class InsertPageController(
     @FXML
     fun initialize() {
         furnishField.getItems().addAll(Furnish.DESIGNER, Furnish.FINE, Furnish.LITTLE)
+        balconyField.getItems().addAll(true, false)
 
         languageField.getItems().addAll("ru", "no", "es", "el")
         languageField.value = localizer.getLanguage()
@@ -157,22 +158,33 @@ class InsertPageController(
 
     @FXML
     fun create() {
-        val body =
-            "[${idField.text},${nameField.text.replace(" ", "_").trim()},${xField.text},${yField.text}," +
-                    "${areaField.text},${numberOfRoomsField.text},${priceField.text},${balconyField.text}," +
-                    "${furnishField.value},${
-                        houseNameField.text.replace(" ", "_").trim()
-                    },${yearField.text},${numberOfFloorsField.text}," +
-                    "${TokensStorage.getAccessToken()}]"
-
-        try {
-            commandsService.insert(body)
-            router.showPage("/fxml/MainPage.fxml", currentBundle)
-        } catch (e: Exception) {
+        if (!checkTypesValid()) {
             val alert = Alert(Alert.AlertType.ERROR)
-            alert.title = "Error"
-            alert.headerText = e.message
-            alert.showAndWait()
+            alert.title = "Ошибка в данных"
+            alert.headerText = "Повторите ввод данных в корректном формате!"
+            val res = alert.showAndWait()
+
+            if (res == ButtonType.OK) {
+                alert.close()
+            }
+        } else {
+            val body =
+                "[${idField.text},${nameField.text.replace(" ", "_").trim()},${xField.text},${yField.text}," +
+                        "${areaField.text},${numberOfRoomsField.text},${priceField.text},${balconyField.value}," +
+                        "${furnishField.value},${
+                            houseNameField.text.replace(" ", "_").trim()
+                        },${yearField.text},${numberOfFloorsField.text}," +
+                        "${TokensStorage.getAccessToken()}]"
+
+            try {
+                commandsService.insert(body)
+                router.showPage("/fxml/MainPage.fxml", currentBundle)
+            } catch (e: Exception) {
+                val alert = Alert(Alert.AlertType.ERROR)
+                alert.title = "Error"
+                alert.headerText = e.message
+                alert.showAndWait()
+            }
         }
     }
 
@@ -203,5 +215,51 @@ class InsertPageController(
                 idField.text = newId.toString()
             }
         }
+    }
+
+    private fun checkTypesValid(): Boolean {
+        var mistakes = 0
+        val fieldsToCheck = listOf(
+            idField to { text: String -> text.toLongOrNull() },
+            xField to { text: String -> text.toLongOrNull() },
+            yField to { text: String -> text.toFloatOrNull() },
+            areaField to { text: String -> text.toLongOrNull() },
+            numberOfRoomsField to { text: String -> text.toLongOrNull() },
+            priceField to { text: String -> text.toLongOrNull() },
+            yearField to { text: String -> text.toLongOrNull() },
+            numberOfFloorsField to { text: String -> text.toLongOrNull() },
+        )
+
+        fieldsToCheck.forEach { (field, parseFunc) ->
+            if (parseFunc(field.text) == null) {
+                field.clear()
+                field.style = "-fx-border-color: red;"
+                mistakes++
+            } else {
+                field.style = ""
+            }
+        }
+
+        val textFieldsToCheck = listOf(nameField, houseNameField)
+        textFieldsToCheck.forEach { field ->
+            if (field.text.isBlank()) {
+                field.style = "-fx-border-color: red;"
+                mistakes++
+            } else {
+                field.style = ""
+            }
+        }
+
+        val choiceBoxesToCheck = listOf(balconyField, furnishField)
+        choiceBoxesToCheck.forEach { choiceBox ->
+            if (choiceBox.value == null) {
+                choiceBox.style = "-fx-border-color: red;"
+                mistakes++
+            } else {
+                choiceBox.style = ""
+            }
+        }
+
+        return mistakes == 0
     }
 }

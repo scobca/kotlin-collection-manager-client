@@ -21,6 +21,7 @@ import org.itmo.kotlincollectionmanagerclient.controllers.i18n.Localizer
 import org.itmo.kotlincollectionmanagerclient.controllers.router.ViewManager
 import org.itmo.kotlincollectionmanagerclient.services.CommandsService
 import org.itmo.kotlincollectionmanagerclient.storages.CurrentFlatStorage.setFlatId
+import org.itmo.kotlincollectionmanagerclient.storages.FlatsStorage.setFlatsCollection
 import org.itmo.kotlincollectionmanagerclient.storages.TokensStorage.getUsername
 import org.itmo.kotlincollectionmanagerclient.storages.TokensStorage.resetUserData
 import org.springframework.stereotype.Component
@@ -84,6 +85,7 @@ class MainPageController(
             val flats : ObservableList<FlatDto> =
                 FXCollections.observableArrayList(commandsService.getFlats().sortedBy { it.id })
 
+            setFlatsCollection(flats)
             tableView.items = flats
         } catch (e: Exception) {
             val alert = Alert(Alert.AlertType.ERROR)
