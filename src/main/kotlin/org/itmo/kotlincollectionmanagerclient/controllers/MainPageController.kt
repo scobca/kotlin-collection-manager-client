@@ -117,6 +117,9 @@ class MainPageController(
     @FXML
     lateinit var insertButton: Button
 
+    @FXML
+    lateinit var uploadFile: Button
+
     private lateinit var currentBundle: ResourceBundle
 
     @FXML
@@ -218,8 +221,11 @@ class MainPageController(
         clearButton.text = currentBundle.getString("main.clearButton")
         getAveragePriceButton.text = currentBundle.getString("main.getAveragePriceButton")
         removeIfLowerKeyButton.text = currentBundle.getString("main.removeIfLowerKeyButton")
+        uploadFile.text = currentBundle.getString("main.uploadFile")
     }
 
+    @FXML
+    fun uploadFile() {}
 
     @FXML
     fun logout() {
