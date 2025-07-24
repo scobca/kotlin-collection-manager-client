@@ -85,6 +85,6 @@ class InvokerLogic(
 
         println(response)
         print("> ")
-        return ""
+        return response
     }
 }

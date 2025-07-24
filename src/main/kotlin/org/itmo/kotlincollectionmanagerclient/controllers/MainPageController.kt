@@ -31,6 +31,7 @@ import org.itmo.kotlincollectionmanagerclient.storages.CurrentFlatStorage.setFla
 import org.itmo.kotlincollectionmanagerclient.storages.FlatsStorage.setFlatsCollection
 import org.itmo.kotlincollectionmanagerclient.storages.TokensStorage.getUsername
 import org.itmo.kotlincollectionmanagerclient.storages.TokensStorage.resetUserData
+import org.itmo.kotlincollectionmanagerclient.utils.InvokerLogic
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.stereotype.Component
 import java.io.BufferedReader
@@ -44,6 +45,7 @@ class MainPageController(
     private val localizer: Localizer,
     private val commandsService: CommandsService,
     private val applicationContext: ConfigurableApplicationContext,
+    private val invokerLogic: InvokerLogic,
 ) {
     @FXML
     lateinit var filterParam: TextField
@@ -237,10 +239,33 @@ class MainPageController(
             val reader = BufferedReader(FileReader(file))
 
             var line: String?
+            val brokenLines = mutableListOf<String>()
+
             while (reader.readLine().also { line = it } != null) {
-                println(line)
+                try {
+                    val response = invokerLogic.handleCommand(line!!)
+                    if (response.contains("not found")) {
+                        brokenLines.add(line)
+                    }
+                } catch (_: Exception) {
+                    brokenLines.addLast(line.toString().trim())
+                }
             }
 
+            if (brokenLines.isNotEmpty()) {
+                val alert = Alert(Alert.AlertType.ERROR)
+                alert.title = "Ошибка в некоторых командах"
+                alert.headerText="Ошибка"
+                alert.contentText = "Проверьте следующие команды в файле: $brokenLines"
+                alert.showAndWait()
+            } else {
+                val alert = Alert(Alert.AlertType.INFORMATION)
+                alert.title = "Файл обработан успешно"
+                alert.contentText = "Все команды распозныны"
+                alert.showAndWait()
+            }
+
+            initialize()
         }
     }
 
