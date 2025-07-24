@@ -20,6 +20,7 @@ import javafx.scene.control.TableColumn
 import javafx.scene.control.TableRow
 import javafx.scene.control.TableView
 import javafx.scene.control.TextField
+import javafx.stage.FileChooser
 import javafx.stage.Modality
 import javafx.stage.Stage
 import org.itmo.kotlincollectionmanagerclient.api.dto.FlatDto
@@ -32,6 +33,8 @@ import org.itmo.kotlincollectionmanagerclient.storages.TokensStorage.getUsername
 import org.itmo.kotlincollectionmanagerclient.storages.TokensStorage.resetUserData
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.stereotype.Component
+import java.io.BufferedReader
+import java.io.FileReader
 import java.util.Locale
 import java.util.ResourceBundle
 
@@ -225,7 +228,21 @@ class MainPageController(
     }
 
     @FXML
-    fun uploadFile() {}
+    fun uploadFile() {
+        val fileChooser = FileChooser()
+        fileChooser.title = currentBundle.getString("main.fileChooserTitle")
+
+        val file = fileChooser.showOpenDialog(null)
+        if (file != null) {
+            val reader = BufferedReader(FileReader(file))
+
+            var line: String?
+            while (reader.readLine().also { line = it } != null) {
+                println(line)
+            }
+
+        }
+    }
 
     @FXML
     fun logout() {
