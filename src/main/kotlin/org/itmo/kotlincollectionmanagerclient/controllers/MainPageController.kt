@@ -47,83 +47,35 @@ class MainPageController(
     private val applicationContext: ConfigurableApplicationContext,
     private val invokerLogic: InvokerLogic,
 ) {
-    @FXML
-    lateinit var filterParam: TextField
+    @FXML lateinit var filterParam: TextField
+    @FXML lateinit var filterLabel: Label
+    @FXML private lateinit var menuLabel: Label
+    @FXML private lateinit var collectionLabel: Label
+    @FXML private lateinit var tableView: TableView<FlatDto>
+    @FXML lateinit var logoutButton: Button
+    @FXML lateinit var userLabel: Label
+    @FXML lateinit var languageField: ChoiceBox<String>
 
-    @FXML
-    lateinit var filterLabel: Label
+    @FXML lateinit var idLabel: TableColumn<FlatDto, Long>
+    @FXML lateinit var flatNameLabel: TableColumn<FlatDto, String>
+    @FXML lateinit var xCordLabel: TableColumn<FlatDto, Long>
+    @FXML lateinit var yCordLabel: TableColumn<FlatDto, Float>
+    @FXML lateinit var flatAreaLabel: TableColumn<FlatDto, Long>
+    @FXML lateinit var numberOfRoomsLabel: TableColumn<FlatDto, Long>
+    @FXML lateinit var priceLabel: TableColumn<FlatDto, Long>
+    @FXML lateinit var balconyLabel: TableColumn<FlatDto, Boolean>
+    @FXML lateinit var furnishLabel: TableColumn<FlatDto, String>
+    @FXML lateinit var houseNameLabel: TableColumn<FlatDto, String>
+    @FXML lateinit var houseYearLabel: TableColumn<FlatDto, Int>
+    @FXML lateinit var numberOfFloorsLabel: TableColumn<FlatDto, Long>
 
-    @FXML
-    private lateinit var menuLabel: Label
-
-    @FXML
-    private lateinit var collectionLabel: Label
-
-    @FXML
-    private lateinit var tableView: TableView<FlatDto>
-
-    @FXML
-    lateinit var logoutButton: Button
-
-    @FXML
-    lateinit var userLabel: Label
-
-    @FXML
-    lateinit var languageField: ChoiceBox<String>
-
-    @FXML
-    lateinit var idLabel: TableColumn<FlatDto, Long>
-
-    @FXML
-    lateinit var flatNameLabel: TableColumn<FlatDto, String>
-
-    @FXML
-    lateinit var xCordLabel: TableColumn<FlatDto, Long>
-
-    @FXML
-    lateinit var yCordLabel: TableColumn<FlatDto, Float>
-
-    @FXML
-    lateinit var flatAreaLabel: TableColumn<FlatDto, Long>
-
-    @FXML
-    lateinit var numberOfRoomsLabel: TableColumn<FlatDto, Long>
-
-    @FXML
-    lateinit var priceLabel: TableColumn<FlatDto, Long>
-
-    @FXML
-    lateinit var balconyLabel: TableColumn<FlatDto, Boolean>
-
-    @FXML
-    lateinit var furnishLabel: TableColumn<FlatDto, String>
-
-    @FXML
-    lateinit var houseNameLabel: TableColumn<FlatDto, String>
-
-    @FXML
-    lateinit var houseYearLabel: TableColumn<FlatDto, Int>
-
-    @FXML
-    lateinit var numberOfFloorsLabel: TableColumn<FlatDto, Long>
-
-    @FXML
-    lateinit var removeIfLowerKeyButton: Button
-
-    @FXML
-    lateinit var getAveragePriceButton: Button
-
-    @FXML
-    lateinit var clearButton: Button
-
-    @FXML
-    lateinit var removeAllByBalconyButton: Button
-
-    @FXML
-    lateinit var insertButton: Button
-
-    @FXML
-    lateinit var uploadFile: Button
+    @FXML lateinit var removeIfLowerKeyButton: Button
+    @FXML lateinit var getAveragePriceButton: Button
+    @FXML lateinit var clearButton: Button
+    @FXML lateinit var removeAllByBalconyButton: Button
+    @FXML lateinit var insertButton: Button
+    @FXML lateinit var graphButton: Button
+    @FXML lateinit var uploadFile: Button
 
     private lateinit var currentBundle: ResourceBundle
 
@@ -268,6 +220,9 @@ class MainPageController(
             initialize()
         }
     }
+
+    @FXML
+    fun goToGraph() = router.showPage("/fxml/FlatMapPage.fxml", currentBundle)
 
     @FXML
     fun logout() {

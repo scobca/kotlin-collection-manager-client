@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.ScatterChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<TitledPane fx:controller="org.itmo.kotlincollectionmanagerclient.controllers.FlatMapPageController" animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="446.0" prefWidth="668.0" text="Flat map" xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/23.0.1">
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="447.0" prefWidth="598.0">
+        <ChoiceBox fx:id="languageField" layoutX="127.0" layoutY="14.0" prefWidth="150.0"/>
+        <Button fx:id="goToMainPageButton" layoutX="13.0" layoutY="14.0" mnemonicParsing="false"
+                onAction="#goToMainPage" prefHeight="26.0" prefWidth="103.0" text="На главную"/>
+        <ScatterChart fx:id="scatterChart" layoutX="-3.0" layoutY="46.0" prefHeight="376.0" prefWidth="675.0">
+            <xAxis>
+                <NumberAxis fx:id="xAxis" side="BOTTOM"/>
+            </xAxis>
+            <yAxis>
+                <NumberAxis fx:id="yAxis" side="LEFT"/>
+            </yAxis>
+        </ScatterChart>
+    </AnchorPane>
+</TitledPane>
